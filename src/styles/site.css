@@ -254,25 +254,15 @@ section { margin-block-start: var(--space-9); }
   display: grid;
   gap: 14px;
   grid-template-columns: 1fr;
-}
-
-/* Projects break out of the 680px prose column by just enough to fit
-   the longest URL alongside the 220px thumbnail. Math: 20px padding +
-   220px thumb + 24px gap + ~260px URL + 20px padding ≈ 544px content;
-   720px card gives modest breathing room. Below the breakpoint, sit
-   inside .page like the rest of the content. */
-@media (min-width: 800px) {
-  #projects {
-    width: 720px;
-    margin-inline: calc((var(--col-prose) - 720px) / 2);
-  }
+  max-width: 560px;
+  margin-inline: auto;
 }
 
 .proj {
   display: grid;
-  grid-template-columns: 220px 1fr;
-  gap: 24px;
-  padding: 20px;
+  grid-template-columns: 160px 1fr;
+  gap: 20px;
+  padding: 18px;
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
   background: var(--surface);
