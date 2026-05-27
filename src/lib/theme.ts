@@ -1,15 +1,26 @@
 /**
- * Dark mode scaffolding. Inline this script in <head> to avoid FOUC.
- * The real design work will likely add a toggle UI on top of this.
+ * Apply theme before paint to avoid a flash.
+ * Order of precedence:
+ *   1. ?theme=light|dark URL param (used by design canvas to render iframes)
+ *   2. localStorage "theme"
+ *   3. prefers-color-scheme (light overrides the dark default)
+ * Default (when none of the above apply) is dark — handled by tokens.css.
  */
 export const themeInitScript = /* js */ `
 (function () {
   try {
+    var params = new URLSearchParams(window.location.search);
+    var forced = params.get("theme");
+    if (forced === "light" || forced === "dark") {
+      document.documentElement.setAttribute("data-theme", forced);
+      return;
+    }
     var stored = localStorage.getItem("theme");
-    var prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-    var theme = stored || (prefersDark ? "dark" : "light");
-    document.documentElement.classList.toggle("dark", theme === "dark");
-    document.documentElement.dataset.theme = theme;
-  } catch (_) {}
+    if (stored === "light" || stored === "dark") {
+      document.documentElement.setAttribute("data-theme", stored);
+    } else if (window.matchMedia && window.matchMedia("(prefers-color-scheme: light)").matches) {
+      document.documentElement.setAttribute("data-theme", "light");
+    }
+  } catch (e) {}
 })();
 `;

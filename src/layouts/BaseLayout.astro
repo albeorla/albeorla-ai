@@ -14,7 +14,7 @@ const {
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang="en" data-theme="dark">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -26,5 +26,8 @@ const {
   </head>
   <body>
     <slot />
+    {/* TODO: Motion 12 staggered fade-up on entry is currently driven by the
+        CSS `.page.entering` hook + sessionStorage flag in ThemeToggle.astro.
+        Revisit if we want JS-driven scroll-linked stagger via Motion. */}
   </body>
 </html>

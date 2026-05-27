@@ -1,61 +1,10 @@
+/* Design tokens first — single source of truth from the design system.
+   Tokens import sets up @font-face, raw values, and semantic theme tokens. */
+@import "./tokens.css";
+
+/* Tailwind v4 — utility classes still available for any future ad-hoc work.
+   The designed surface uses its own CSS classes from site.css. */
 @import "tailwindcss";
 
-/* ---------- Design tokens (CSS-first, per Tailwind v4 @theme) ---------- */
-@theme {
-  /* Typography */
-  --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-  --font-display: "Inter", ui-sans-serif, system-ui, -apple-system, sans-serif;
-  --font-mono: ui-monospace, "SF Mono", "JetBrains Mono", Menlo, Consolas, monospace;
-
-  /* Neutral palette (OKLCH for perceptual uniformity) */
-  --color-ink-50: oklch(98% 0.005 250);
-  --color-ink-100: oklch(95% 0.008 250);
-  --color-ink-200: oklch(88% 0.01 250);
-  --color-ink-400: oklch(65% 0.015 250);
-  --color-ink-600: oklch(45% 0.02 250);
-  --color-ink-800: oklch(25% 0.02 250);
-  --color-ink-900: oklch(15% 0.015 250);
-  --color-ink-950: oklch(9% 0.01 250);
-
-  /* Accent (deliberately understated; design pass will refine) */
-  --color-accent: oklch(72% 0.15 250);
-}
-
-/* ---------- Base layer ---------- */
-@layer base {
-  :root {
-    color-scheme: light dark;
-    --bg: var(--color-ink-50);
-    --fg: var(--color-ink-900);
-    --muted: var(--color-ink-600);
-  }
-
-  :root.dark {
-    --bg: var(--color-ink-950);
-    --fg: var(--color-ink-100);
-    --muted: var(--color-ink-400);
-  }
-
-  html {
-    background-color: var(--bg);
-    color: var(--fg);
-    font-family: var(--font-sans);
-    font-feature-settings: "cv11", "ss01", "ss03";
-    text-rendering: optimizeLegibility;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-  }
-
-  body {
-    min-height: 100dvh;
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    *,
-    *::before,
-    *::after {
-      animation-duration: 0.01ms !important;
-      transition-duration: 0.01ms !important;
-    }
-  }
-}
+/* Component CSS — layered on top of tokens. */
+@import "./site.css";

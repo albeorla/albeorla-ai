@@ -35,3 +35,7 @@ infra/.terraform.tfstate.lock.info
 
 # misc
 *.tsbuildinfo
+
+# design export — reference-only, not checked in
+.design-export/
+albeorla.ai portfolio site.zip

@@ -1,0 +1,9 @@
+---
+// Build-time injected by Vite `define` in astro.config.mjs.
+const commit = __BUILD_COMMIT__;
+const deployed = __BUILD_DATE__;
+---
+<footer class="site-footer">
+  <span>commit<span class="dot">·</span>{commit}<span class="dot">·</span>deployed<span class="dot">·</span>{deployed}</span>
+  <span class="footer-right">albert orlando<span class="dot">·</span>—</span>
+</footer>
