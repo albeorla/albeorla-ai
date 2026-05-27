@@ -1,0 +1,5 @@
+project_id      = "albeorla-ai-site"
+billing_account = "012A77-3EB40A-DD7869"
+region          = "us-central1"
+domain          = "albeorla.ai"
+www_domain      = "www.albeorla.ai"

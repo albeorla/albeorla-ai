@@ -1,0 +1,33 @@
+{
+  "name": "albeorla-ai",
+  "type": "module",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Personal portfolio site for Albert Orlando at albeorla.ai",
+  "scripts": {
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro check && astro build",
+    "preview": "astro preview",
+    "astro": "astro",
+    "format": "biome format --write .",
+    "lint": "biome lint .",
+    "check": "biome check .",
+    "typecheck": "astro check"
+  },
+  "dependencies": {
+    "astro": "^6.3.8",
+    "@astrojs/check": "^0.9.9",
+    "@tailwindcss/vite": "^4.3.0",
+    "tailwindcss": "^4.3.0",
+    "vite": "^7.3.3",
+    "motion": "^12.40.0",
+    "typescript": "^6.0.3"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^2.4.16"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  }
+}

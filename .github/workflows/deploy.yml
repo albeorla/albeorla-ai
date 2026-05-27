@@ -1,0 +1,70 @@
+# Build the Astro site and publish it to GCS, then invalidate the
+# Cloud CDN cache. Workflow is intentionally inactive until secrets are
+# wired in — see infra/README.md.
+name: deploy
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-${{ github.ref }}
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+  id-token: write # needed for Workload Identity Federation
+
+env:
+  GCP_PROJECT: albeorla-ai-site
+  GCS_BUCKET: albeorla-ai-site
+  URL_MAP: albeorla-ai-urlmap
+
+jobs:
+  build-deploy:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: "1.3"
+
+      - name: Install
+        run: bun install --frozen-lockfile
+
+      - name: Build
+        run: bun run build
+
+      - name: Authenticate to GCP
+        uses: google-github-actions/auth@v2
+        with:
+          # Configure ONE of these via Settings -> Secrets and variables.
+          # Preferred: Workload Identity Federation.
+          workload_identity_provider: ${{ secrets.GCP_WIF_PROVIDER }}
+          service_account: ${{ secrets.GCP_DEPLOY_SA }}
+
+      - name: Set up gcloud
+        uses: google-github-actions/setup-gcloud@v2
+        with:
+          project_id: ${{ env.GCP_PROJECT }}
+
+      # rsync the built site. Long cache on hashed assets, short on HTML.
+      - name: Upload hashed assets (immutable, 1y cache)
+        run: |
+          gcloud storage rsync ./dist/_assets gs://${GCS_BUCKET}/_assets \
+            --recursive --delete-unmatched-destination-objects \
+            --cache-control="public, max-age=31536000, immutable"
+
+      - name: Upload HTML and other top-level files (no-cache)
+        run: |
+          gcloud storage rsync ./dist gs://${GCS_BUCKET} \
+            --recursive --delete-unmatched-destination-objects \
+            --exclude="^_assets/" \
+            --cache-control="public, max-age=60, must-revalidate"
+
+      - name: Invalidate Cloud CDN cache
+        run: |
+          gcloud compute url-maps invalidate-cdn-cache "${URL_MAP}" \
+            --path "/*" --async --project "${GCP_PROJECT}"
