@@ -3,3 +3,7 @@ billing_account = "012A77-3EB40A-DD7869"
 region          = "us-central1"
 domain          = "albeorla.ai"
 www_domain      = "www.albeorla.ai"
+
+# Fill in once the GitHub remote exists. Leave empty to skip WIF resources.
+# github_repo = "albeorla/albeorla-ai"
+# github_deploy_ref = "refs/heads/main"  # optional, this is the default

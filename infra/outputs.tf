@@ -27,3 +27,16 @@ output "ssl_cert_name" {
   description = "Managed SSL cert name. Status reaches ACTIVE only after DNS cuts over."
   value       = google_compute_managed_ssl_certificate.site.name
 }
+
+output "deploy_service_account" {
+  description = "Email of the GitHub Actions deploy SA. Set as repo secret GCP_DEPLOY_SA."
+  value       = google_service_account.gh_deploy.email
+}
+
+output "wif_provider" {
+  description = <<-EOT
+    Full resource name of the GitHub OIDC provider. Set as repo secret
+    GCP_WIF_PROVIDER. Empty until `github_repo` is set in terraform.tfvars.
+  EOT
+  value       = local.wif_enabled ? google_iam_workload_identity_pool_provider.github[0].name : ""
+}
