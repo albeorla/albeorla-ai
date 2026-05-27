@@ -23,11 +23,92 @@ const {
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <title>{title}</title>
     <script is:inline set:html={themeInitScript} />
+    <script is:inline>
+      // Pre-paint guard: hide top-level sections of <main class="page"> before
+      // Motion 12 animates them in. Runs synchronously in <head> so children
+      // never flash visible. Skipped on reduced motion or after first session
+      // visit so the page renders instantly.
+      (function () {
+        try {
+          var entered = sessionStorage.getItem("albeorla-ai-entered");
+          var reduced =
+            window.matchMedia &&
+            window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+          if (!entered && !reduced) {
+            document.documentElement.setAttribute("data-page-entering", "1");
+          }
+        } catch (_) {}
+      })();
+    </script>
+    <style is:inline>
+      html[data-page-entering="1"] .page > * {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+    </style>
   </head>
   <body>
     <slot />
-    {/* TODO: Motion 12 staggered fade-up on entry is currently driven by the
-        CSS `.page.entering` hook + sessionStorage flag in ThemeToggle.astro.
-        Revisit if we want JS-driven scroll-linked stagger via Motion. */}
+    <script>
+      // Motion 12 staggered fade-up on first session visit. Targets the direct
+      // children of <main class="page"> (Hero, Now, Work, Projects, Contact,
+      // Footer). 60ms stagger, 300ms duration, 20px rise, ease-out matching
+      // the design token. Reduced motion: show everything immediately.
+      import { animate, stagger } from "motion";
+
+      (function () {
+        const page = document.querySelector("main.page");
+        if (!page) return;
+
+        const items = Array.from(page.children) as HTMLElement[];
+        if (items.length === 0) return;
+
+        const clearPrepaint = () => {
+          document.documentElement.removeAttribute("data-page-entering");
+          for (const el of items) {
+            el.style.opacity = "";
+            el.style.transform = "";
+          }
+        };
+
+        let entered = false;
+        try {
+          entered = sessionStorage.getItem("albeorla-ai-entered") === "1";
+        } catch (_) {}
+
+        const reduced =
+          window.matchMedia &&
+          window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+        if (entered || reduced) {
+          clearPrepaint();
+          return;
+        }
+
+        try {
+          sessionStorage.setItem("albeorla-ai-entered", "1");
+        } catch (_) {}
+
+        // Match --ease-out token: cubic-bezier(0.22, 0.61, 0.36, 1).
+        animate(
+          items,
+          { opacity: [0, 1], y: [20, 0] },
+          {
+            duration: 0.3,
+            ease: [0.22, 0.61, 0.36, 1],
+            delay: stagger(0.06),
+          },
+        ).finished.finally(() => {
+          // Strip inline styles Motion leaves behind so theme/layout updates
+          // aren't pinned to the entry transform.
+          document.documentElement.removeAttribute("data-page-entering");
+          for (const el of items) {
+            el.style.opacity = "";
+            el.style.transform = "";
+            el.style.willChange = "";
+          }
+        });
+      })();
+    </script>
   </body>
 </html>

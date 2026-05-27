@@ -33,13 +33,5 @@
         setTheme(next);
       }
     });
-
-    // Entry animation, once per session.
-    try {
-      if (!sessionStorage.getItem("entered")) {
-        document.querySelector(".page")?.classList.add("entering");
-        sessionStorage.setItem("entered", "1");
-      }
-    } catch (_) {}
   })();
 </script>

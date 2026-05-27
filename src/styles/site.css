@@ -81,27 +81,10 @@ body::before {
 /* —— Sections —— */
 section { margin-block-start: var(--space-9); }
 
-/* —— Entry animation: stagger fade-up, once per session —— */
-.page.entering > * {
-  opacity: 0;
-  transform: translateY(20px);
-  animation: enter 320ms var(--ease-out) forwards;
-}
-.page.entering > *:nth-child(1) { animation-delay:   0ms; }
-.page.entering > *:nth-child(2) { animation-delay:  60ms; }
-.page.entering > *:nth-child(3) { animation-delay: 120ms; }
-.page.entering > *:nth-child(4) { animation-delay: 180ms; }
-.page.entering > *:nth-child(5) { animation-delay: 240ms; }
-.page.entering > *:nth-child(6) { animation-delay: 300ms; }
-.page.entering > *:nth-child(7) { animation-delay: 360ms; }
-@keyframes enter {
-  to { opacity: 1; transform: translateY(0); }
-}
-@media (prefers-reduced-motion: reduce) {
-  .page.entering > * { opacity: 1; transform: none; animation: none; }
-}
+/* —— Entry animation: Motion 12 stagger fade-up runs from BaseLayout. ——
+   Pre-paint hiding is inlined in <head> there to prevent first-paint flash. */
 
-/* —— View-Transitions cross-fade —— */
+/* —— View-Transitions cross-fade ——*/
 ::view-transition-old(root),
 ::view-transition-new(root) {
   animation-duration: 200ms;
