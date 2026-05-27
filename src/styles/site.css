@@ -256,14 +256,15 @@ section { margin-block-start: var(--space-9); }
   grid-template-columns: 1fr;
 }
 
-/* Projects break out of the 680px prose column to a wider media column
-   on roomy viewports so URLs like github.com/albeorla/* fit on one line
-   alongside a 220px thumbnail. Below the breakpoint, sit inside .page
-   like the rest of the content. */
-@media (min-width: 880px) {
+/* Projects break out of the 680px prose column by just enough to fit
+   the longest URL alongside the 220px thumbnail. Math: 20px padding +
+   220px thumb + 24px gap + ~260px URL + 20px padding ≈ 544px content;
+   720px card gives modest breathing room. Below the breakpoint, sit
+   inside .page like the rest of the content. */
+@media (min-width: 800px) {
   #projects {
-    width: var(--col-media);
-    margin-inline: calc((var(--col-prose) - var(--col-media)) / 2);
+    width: 720px;
+    margin-inline: calc((var(--col-prose) - 720px) / 2);
   }
 }
 
