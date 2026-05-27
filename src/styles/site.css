@@ -322,8 +322,12 @@ section { margin-block-start: var(--space-9); }
   color: var(--text-dim);
   margin-top: auto;
   padding-top: 2px;
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  white-space: nowrap;
 }
-.proj-link-label { color: var(--text-primary); margin-left: 6px; }
+.proj-link-label { color: var(--text-primary); }
 
 /* —— Cleanse thumbnail: tiny phone frame —— */
 .proj-thumb-cleanse {
