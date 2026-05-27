@@ -54,6 +54,15 @@ resource "google_storage_bucket_iam_member" "gh_deploy_bucket" {
   member = "serviceAccount:${google_service_account.gh_deploy.email}"
 }
 
+// `gcloud storage rsync` to the bucket root calls `storage.buckets.get` for
+// metadata, which objectAdmin does not include. legacyBucketReader adds only
+// bucket-level GET/list -- no object or IAM permissions -- and is bucket-scoped.
+resource "google_storage_bucket_iam_member" "gh_deploy_bucket_get" {
+  bucket = google_storage_bucket.site.name
+  role   = "roles/storage.legacyBucketReader"
+  member = "serviceAccount:${google_service_account.gh_deploy.email}"
+}
+
 // Custom role granting ONLY `compute.urlMaps.invalidateCache` at the project
 // level. The predefined alternative (`roles/compute.loadBalancerAdmin`) is
 // far broader -- it can mutate URL maps, backend services, certs, etc. The
