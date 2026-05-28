@@ -277,7 +277,7 @@ section { margin-block-start: var(--space-9); }
   transition: border-color var(--dur-hover) var(--ease-out);
   align-items: stretch;
 }
-.proj:hover { border-color: var(--border-hover); }
+.proj:hover { border-color: var(--border-hover); text-decoration: none; }
 .proj:hover .proj-link-label {
   text-decoration: underline;
   text-decoration-color: currentColor;
