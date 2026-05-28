@@ -247,6 +247,9 @@ section { margin-block-start: var(--space-9); }
   font-size: 12px;
   color: var(--text-dim);
   margin: 12px 0 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
 }
 .work-stack .dot { padding: 0 6px; opacity: 0.6; }
 
