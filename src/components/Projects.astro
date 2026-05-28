@@ -8,13 +8,23 @@
 
   <div class="projects">
     <a class="proj" href="https://cleanse.sh" target="_blank" rel="noopener">
-      <div class="proj-thumb" aria-hidden="true">
-        <div class="cli">
-          <div class="cli-line"><span class="cli-prompt">$</span> cleanse share &lt;link&gt;</div>
-          <div class="cli-line dim">fetched · ink-switch.com</div>
-          <div class="cli-line dim">summarized · 4 points</div>
-          <div class="cli-line dim">saved to <span class="num">"reading"</span></div>
-          <div class="cli-line"><span class="cli-prompt">$</span><span class="cli-caret"></span></div>
+      <div class="proj-thumb proj-thumb-cleanse" aria-hidden="true">
+        <div class="ph-frame">
+          <div class="ph-status">9:41<span></span><span></span><span></span></div>
+          <div class="ph-app">
+            <div class="ph-eyebrow">shared · 2m ago</div>
+            <div class="ph-title">Notes on local‑first software</div>
+            <div class="ph-source">ink-and-switch.com<span class="ph-ext">↗</span></div>
+            <div class="ph-summary">
+              <span class="ph-line"></span>
+              <span class="ph-line"></span>
+              <span class="ph-line short"></span>
+            </div>
+            <div class="ph-chips">
+              <span class="ph-chip">reading</span>
+              <span class="ph-chip">archive</span>
+            </div>
+          </div>
         </div>
       </div>
       <div class="proj-body">
@@ -31,14 +41,35 @@
     </a>
 
     <a class="proj" href="https://github.com/albeorla/sparkle" target="_blank" rel="noopener">
-      <div class="proj-thumb" aria-hidden="true">
-        <div class="cli">
-          <div class="cli-line"><span class="cli-prompt">$</span> sparkle add claim</div>
-          <div class="cli-line dim">stored · <span class="num">a3f2</span> · sha 8c1d…</div>
-          <div class="cli-line dim">+ 2 evidence · 1 obj</div>
-          <div class="cli-line dim">graph · <span class="num">14n</span> · <span class="num">22e</span></div>
-          <div class="cli-line"><span class="cli-prompt">$</span><span class="cli-caret"></span></div>
-        </div>
+      <div class="proj-thumb proj-thumb-sparkle" aria-hidden="true">
+        <svg viewBox="0 0 320 140" preserveAspectRatio="xMidYMid meet" class="graph">
+          <g class="graph-edges">
+            <line x1="60" y1="70" x2="130" y2="40"></line>
+            <line x1="60" y1="70" x2="130" y2="100"></line>
+            <line x1="130" y1="40" x2="200" y2="30"></line>
+            <line x1="130" y1="40" x2="200" y2="60"></line>
+            <line x1="130" y1="100" x2="200" y2="90"></line>
+            <line x1="130" y1="100" x2="200" y2="115"></line>
+            <line x1="200" y1="60" x2="260" y2="50"></line>
+            <line x1="200" y1="90" x2="260" y2="90"></line>
+          </g>
+          <g class="graph-nodes">
+            <circle cx="60"  cy="70"  r="6"></circle>
+            <circle cx="130" cy="40"  r="5"></circle>
+            <circle cx="130" cy="100" r="5"></circle>
+            <circle cx="200" cy="30"  r="4"></circle>
+            <circle cx="200" cy="60"  r="4"></circle>
+            <circle cx="200" cy="90"  r="4"></circle>
+            <circle cx="200" cy="115" r="4"></circle>
+            <circle cx="260" cy="50"  r="3.5" class="leaf"></circle>
+            <circle cx="260" cy="90"  r="3.5" class="leaf"></circle>
+          </g>
+          <g class="graph-labels">
+            <text x="60"  y="92">claim</text>
+            <text x="200" y="22">evidence</text>
+            <text x="200" y="135">objection</text>
+          </g>
+        </svg>
       </div>
       <div class="proj-body">
         <div class="proj-meta">
@@ -54,12 +85,12 @@
     </a>
 
     <a class="proj" href="https://github.com/albeorla/gitingest" target="_blank" rel="noopener">
-      <div class="proj-thumb" aria-hidden="true">
+      <div class="proj-thumb proj-thumb-gitingest" aria-hidden="true">
         <div class="cli">
-          <div class="cli-line"><span class="cli-prompt">$</span> gitingest ./api</div>
-          <div class="cli-line dim">read 184 files…</div>
-          <div class="cli-line dim">skipped binary · .git</div>
-          <div class="cli-line dim">tokens · <span class="num">142,308</span> ✓</div>
+          <div class="cli-line"><span class="cli-prompt">$</span> gitingest ./api --max 200k</div>
+          <div class="cli-line dim">reading 184 files…</div>
+          <div class="cli-line dim">skipped binary · node_modules · .git</div>
+          <div class="cli-line dim">tokens · <span class="num">142,308</span> · clipboard ✓</div>
           <div class="cli-line"><span class="cli-prompt">$</span><span class="cli-caret"></span></div>
         </div>
       </div>
