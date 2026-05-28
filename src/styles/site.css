@@ -11,7 +11,7 @@ body {
   font-family: var(--font-sans);
   font-size: var(--fs-body);
   line-height: var(--lh-body);
-  min-height: 100vh;
+  min-height: 100dvh;
   font-feature-settings: "tnum";
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -34,7 +34,10 @@ body::before {
   z-index: 1;
   max-width: var(--col-prose);
   margin-inline: auto;
-  padding: clamp(72px, 14vh, 144px) var(--gutter) var(--space-8);
+  padding:
+    clamp(72px, 14vh, 144px)
+    var(--gutter)
+    calc(var(--space-5) + env(safe-area-inset-bottom, 0px));
 }
 
 /* —— Skip link —— */
