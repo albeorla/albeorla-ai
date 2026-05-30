@@ -345,7 +345,8 @@ section { margin-block-start: var(--space-9); }
 }
 .ph-frame {
   width: 96px;
-  height: 124px;
+  height: 148px;
+  overflow: hidden;
   border: 1px solid var(--border-hover);
   border-radius: 14px;
   background: var(--surface);
@@ -374,7 +375,7 @@ section { margin-block-start: var(--space-9); }
 }
 .ph-source .ph-ext { color: var(--text-dim); margin-left: 2px; }
 .ph-summary { display: flex; flex-direction: column; gap: 3px; margin-top: 1px; }
-.ph-line { display: block; height: 3px; background: var(--border-hover); border-radius: 2px; }
+.ph-line { display: block; height: 3px; background: var(--border-hover); border-radius: 2px; transform-origin: left center; }
 .ph-line.short { width: 60%; }
 .ph-chips { display: flex; gap: 4px; margin-top: 2px; }
 .ph-chip {
@@ -424,28 +425,304 @@ section { margin-block-start: var(--space-9); }
 .cli-line { white-space: nowrap; }
 .cli-line.dim { color: var(--text-muted); }
 .cli-prompt { color: var(--accent); margin-right: 6px; }
-.cli-line .num { color: var(--text-primary); }
+/* inline-block so the count's scale tick applies (transforms are ignored on inline spans) */
+.cli-line .num { color: var(--text-primary); display: inline-block; transform-origin: right center; }
 .cli-caret {
   display: inline-block; width: 5px; height: 9px;
   background: var(--text-primary); vertical-align: -1px;
-  animation: blink 1.05s steps(2, end) infinite;
 }
-@keyframes blink {
-  0%, 50% { opacity: 1; }
-  50.01%, 100% { opacity: 0; }
+
+/* —— gitingest thumbnail: ambient typing run ——
+   Command + output lines reveal in sequence, the token count firms up,
+   "clipboard ✓" lands last, then the caret blinks through a long held rest
+   before the loop quietly resets. 10.5s total.
+   Gated behind no-preference so reduced-motion (and the global reduce rule)
+   simply render the finished terminal: every base state above already equals
+   its resolved frame (all lines visible, caret solid). transform/opacity only. */
+@media (prefers-reduced-motion: no-preference) {
+  /* Lines settle in once on a gentle stagger (fade + 2px upward drift). */
+  .proj-thumb-gitingest .cli-line { animation: gi-line 10.5s var(--ease-out) infinite both; }
+  .proj-thumb-gitingest .cli-line:nth-child(1) { animation-delay: 0.2s; }
+  .proj-thumb-gitingest .cli-line:nth-child(2) { animation-delay: 1.0s; }
+  .proj-thumb-gitingest .cli-line:nth-child(3) { animation-delay: 1.8s; }
+  .proj-thumb-gitingest .cli-line:nth-child(4) { animation-delay: 2.6s; }
+  /* Prompt line lands last (~3.8s); after it, nothing moves but the caret. */
+  .proj-thumb-gitingest .cli-line:nth-child(5) { animation-delay: 3.4s; }
+  /* Token count firms up just behind its line, then settles. */
+  .proj-thumb-gitingest .cli-line:nth-child(4) .num { animation: gi-num 10.5s var(--ease-out) infinite both; animation-delay: 2.6s; }
+  /* Caret stays hidden through the reveal, then blinks slowly across the long
+     held rest (~4.3s-10.5s) and ends solid so the base frame is the caret. */
+  .proj-thumb-gitingest .cli-caret { animation: gi-caret 10.5s steps(1, end) infinite both; }
 }
-.cli-line { white-space: nowrap; }
-.cli-line.dim { color: var(--text-muted); }
-.cli-prompt { color: var(--accent); margin-right: 6px; }
-.cli-line .num { color: var(--text-primary); }
-.cli-caret {
-  display: inline-block; width: 5px; height: 9px;
-  background: var(--text-primary); vertical-align: -1px;
-  animation: blink 1.05s steps(2, end) infinite;
+@keyframes gi-line {
+  0%, 1%   { opacity: 0; transform: translateY(2px); }
+  4%       { opacity: 1; transform: translateY(0); }
+  /* hold the finished line dead-still through the rest of the loop */
+  100%     { opacity: 1; transform: translateY(0); }
 }
-@keyframes blink {
-  0%, 50% { opacity: 1; }
-  50.01%, 100% { opacity: 0; }
+@keyframes gi-num {
+  0%, 3%   { opacity: 0.4; transform: scale(0.96); }
+  5.5%     { opacity: 1;   transform: scale(1.05); }
+  8%, 100% { opacity: 1;   transform: scale(1); }
+}
+@keyframes gi-caret {
+  /* hidden through the reveal, then a calm ~0.9s-on / ~0.9s-off blink across the
+     held rest; resolves to solid (opacity 1) to match the static base frame. */
+  0%, 41%  { opacity: 0; }
+  42%, 50% { opacity: 1; }
+  58%, 66% { opacity: 0; }
+  74%, 82% { opacity: 1; }
+  90%, 98% { opacity: 0; }
+  100%     { opacity: 1; }
+}
+
+/* —— atrp thumbnail: decision ledger —— */
+.proj-thumb-atrp {
+  /* muted, editorial reject red — readable on both themes, never alarm-red */
+  --atrp-reject: #E5484D;
+  padding: 12px;
+  background:
+    linear-gradient(180deg, color-mix(in oklab, var(--surface) 95%, var(--bg)) 0%, var(--bg) 100%);
+}
+.proj-thumb-atrp .ledger {
+  width: 100%;
+  font-family: var(--font-mono);
+  font-size: 8px;
+  line-height: 1.5;
+  color: var(--text-muted);
+  letter-spacing: 0.02em;
+  font-feature-settings: "tnum";
+}
+.proj-thumb-atrp .ledger-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  font-size: 6.5px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  padding-bottom: 4px;
+  margin-bottom: 4px;
+  border-bottom: 1px solid var(--border);
+}
+.proj-thumb-atrp .ledger-id { color: var(--text-muted); }
+.proj-thumb-atrp .ledger-rows { display: grid; gap: 2px; }
+.proj-thumb-atrp .ledger-row {
+  display: grid;
+  grid-template-columns: 9px 1fr auto;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+}
+.proj-thumb-atrp .ledger-mark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 9px;
+  height: 9px;
+  color: var(--atrp-reject);
+  opacity: 1;
+  transform: scale(1);
+}
+.proj-thumb-atrp .ledger-test {
+  color: var(--text-muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.proj-thumb-atrp .ledger-stat {
+  color: var(--text-dim);
+  font-size: 7px;
+  letter-spacing: 0.04em;
+  text-align: right;
+  opacity: 0.85;
+}
+.proj-thumb-atrp .ledger-verdict {
+  display: flex;
+  align-items: baseline;
+  gap: 5px;
+  margin-top: 6px;
+  padding-top: 5px;
+  border-top: 1px solid var(--border);
+  font-size: 7px;
+  letter-spacing: 0.06em;
+}
+.proj-thumb-atrp .vlabel {
+  text-transform: uppercase;
+  color: var(--text-dim);
+  letter-spacing: 0.14em;
+}
+.proj-thumb-atrp .vmark {
+  text-transform: uppercase;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  white-space: nowrap;
+  color: var(--atrp-reject);
+  padding: 1px 5px;
+  border: 1px solid color-mix(in oklab, var(--atrp-reject) 55%, transparent);
+  border-radius: var(--radius-pill);
+  background: color-mix(in oklab, var(--atrp-reject) 9%, transparent);
+  opacity: 1;
+  transform: scale(1);
+}
+.proj-thumb-atrp .vreason {
+  color: var(--text-dim);
+  font-size: 6.5px;
+  letter-spacing: 0.02em;
+  margin-left: auto;
+}
+
+/* Ambient loop: reject marks stamp in sequence, the verdict settles, then a held rest.
+   Gated behind no-preference so reduced-motion just renders the finished ledger above
+   (every element's base state already equals its resolved frame). transform/opacity only. */
+@media (prefers-reduced-motion: no-preference) {
+  .proj-thumb-atrp .ledger-mark { animation: atrp-stamp 9s var(--ease-out) infinite both; }
+  .proj-thumb-atrp .ledger-stat { animation: atrp-stat 9s var(--ease-out) infinite both; }
+  .proj-thumb-atrp .ledger-row:nth-child(1) .ledger-mark,
+  .proj-thumb-atrp .ledger-row:nth-child(1) .ledger-stat { animation-delay: 0.6s; }
+  .proj-thumb-atrp .ledger-row:nth-child(2) .ledger-mark,
+  .proj-thumb-atrp .ledger-row:nth-child(2) .ledger-stat { animation-delay: 1.3s; }
+  .proj-thumb-atrp .ledger-row:nth-child(3) .ledger-mark,
+  .proj-thumb-atrp .ledger-row:nth-child(3) .ledger-stat { animation-delay: 2.0s; }
+  .proj-thumb-atrp .ledger-row:nth-child(4) .ledger-mark,
+  .proj-thumb-atrp .ledger-row:nth-child(4) .ledger-stat { animation-delay: 2.7s; }
+  .proj-thumb-atrp .vmark { animation: atrp-verdict 9s var(--ease-out) infinite both; animation-delay: 3.4s; }
+}
+
+@keyframes atrp-stamp {
+  0%, 6%    { opacity: 0; transform: scale(0.55); }
+  10%       { opacity: 1; transform: scale(1.07); }
+  14%, 100% { opacity: 1; transform: scale(1); }
+}
+@keyframes atrp-stat {
+  0%, 7%    { opacity: 0; }
+  13%, 100% { opacity: 0.85; }
+}
+@keyframes atrp-verdict {
+  0%, 37%   { opacity: 0.5;  transform: scale(0.98); }
+  41%       { opacity: 1;    transform: scale(1.05); }
+  46%, 62%  { opacity: 1;    transform: scale(1); }
+  72%, 100% { opacity: 0.82; transform: scale(1); }
+}
+
+/* —— sparkle thumbnail: knowledge graph "thinking" ——
+   Ambient loop. A brightness pulse travels the edges outward from the claim
+   root -> the evidence/objection hubs -> the sub-nodes -> the accent leaves;
+   each node gives a tiny swell as the front arrives (the leaves bloom a soft
+   accent glow), each edge warms toward the accent a beat before the front
+   crosses it, then the whole graph holds dead-still for ~2.2s before
+   repeating. 8s total.
+   Gated behind no-preference; every base state above already equals the
+   resolved/finished frame (full opacity, scale 1, normal border-hover stroke),
+   so reduced-motion users and the global reduce rule simply see the static,
+   fully-revealed graph. transform / opacity / stroke + filter only — no
+   layout properties, no JS. */
+@media (prefers-reduced-motion: no-preference) {
+  .proj-thumb-sparkle .graph-nodes circle {
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: sparkle-node 8s var(--ease-out) infinite both;
+  }
+  .proj-thumb-sparkle .graph-edges line {
+    animation: sparkle-edge 8s var(--ease-out) infinite both;
+  }
+  .proj-thumb-sparkle .graph-nodes circle.leaf {
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: sparkle-leaf 8s var(--ease-out) infinite both;
+  }
+
+  /* Pulse front, claim root -> leaves. Nodes swell as the front arrives;
+     each edge warms a beat earlier, just as the front crosses it. */
+  /* root claim */
+  .proj-thumb-sparkle .graph-nodes circle:nth-of-type(1) { animation-delay: 0.30s; }
+  /* root -> hub edges */
+  .proj-thumb-sparkle .graph-edges line:nth-of-type(1),
+  .proj-thumb-sparkle .graph-edges line:nth-of-type(2) { animation-delay: 0.55s; }
+  /* evidence / objection hubs */
+  .proj-thumb-sparkle .graph-nodes circle:nth-of-type(2),
+  .proj-thumb-sparkle .graph-nodes circle:nth-of-type(3) { animation-delay: 0.95s; }
+  /* hub -> sub-node edges */
+  .proj-thumb-sparkle .graph-edges line:nth-of-type(3),
+  .proj-thumb-sparkle .graph-edges line:nth-of-type(4),
+  .proj-thumb-sparkle .graph-edges line:nth-of-type(5),
+  .proj-thumb-sparkle .graph-edges line:nth-of-type(6) { animation-delay: 1.30s; }
+  /* sub-nodes */
+  .proj-thumb-sparkle .graph-nodes circle:nth-of-type(4),
+  .proj-thumb-sparkle .graph-nodes circle:nth-of-type(5),
+  .proj-thumb-sparkle .graph-nodes circle:nth-of-type(6),
+  .proj-thumb-sparkle .graph-nodes circle:nth-of-type(7) { animation-delay: 1.75s; }
+  /* sub-node -> leaf edges */
+  .proj-thumb-sparkle .graph-edges line:nth-of-type(7),
+  .proj-thumb-sparkle .graph-edges line:nth-of-type(8) { animation-delay: 2.30s; }
+  /* accent leaves (these also match circle:nth-of-type(8),(9); the .leaf rule's
+     glowing sparkle-leaf animation wins the cascade over the generic node one) */
+  .proj-thumb-sparkle .graph-nodes circle:nth-of-type(8),
+  .proj-thumb-sparkle .graph-nodes circle:nth-of-type(9) { animation-delay: 2.75s; }
+}
+
+/* base = resolved (scale 1); the pulse adds a 4% swell, then settles back */
+@keyframes sparkle-node {
+  0%, 8%    { transform: scale(1); }
+  11%       { transform: scale(1.04); }
+  18%, 100% { transform: scale(1); }
+}
+/* base stroke = border-hover; the pulse warms it toward the accent, then back */
+@keyframes sparkle-edge {
+  0%, 7%    { stroke: var(--border-hover); }
+  12%       { stroke: color-mix(in oklab, var(--accent) 55%, var(--border-hover)); }
+  20%, 100% { stroke: var(--border-hover); }
+}
+/* leaves: a slightly larger swell plus a soft accent glow that blooms then fades */
+@keyframes sparkle-leaf {
+  0%, 8%    { transform: scale(1);   filter: none; }
+  11%       { transform: scale(1.1); filter: drop-shadow(0 0 2.5px color-mix(in oklab, var(--accent) 55%, transparent)); }
+  18%       { transform: scale(1);   filter: drop-shadow(0 0 1px color-mix(in oklab, var(--accent) 40%, transparent)); }
+  30%, 100% { transform: scale(1);   filter: none; }
+}
+
+/* —— cleanse thumbnail: a shared item gets summarized ——
+   Ambient loop. A shared item resolves top-to-bottom like the app finishing its
+   work: the timestamp + title + source settle in, the three summary bars wipe in
+   left-to-right line by line (as if being summarized), then the reading/archive
+   chips settle in last. Everything resolves by ~6.5s and holds dead-still for ~2.8s
+   before repeating. 9.5s total.
+   Gated behind no-preference; every element's BASE css already equals its finished
+   frame (opacity 1, scale 1, full-width bars), so reduced-motion users and the site's
+   global reduce rule simply see the static thumbnail. transform + opacity only;
+   bars "fill" via scaleX from the existing transform-origin:left, never width. */
+@media (prefers-reduced-motion: no-preference) {
+  .proj-thumb-cleanse .ph-eyebrow { animation: cl-rise 9.5s var(--ease-out) infinite both; }
+  .proj-thumb-cleanse .ph-title   { animation: cl-rise 9.5s var(--ease-out) infinite both; animation-delay: 0.4s; }
+  .proj-thumb-cleanse .ph-source  { animation: cl-rise 9.5s var(--ease-out) infinite both; animation-delay: 0.9s; }
+
+  /* the summarize step: bars wipe in left-to-right, line by line */
+  .proj-thumb-cleanse .ph-line { animation: cl-fill 9.5s var(--ease-out) infinite both; }
+  .proj-thumb-cleanse .ph-line:nth-of-type(1) { animation-delay: 2.3s; }
+  .proj-thumb-cleanse .ph-line:nth-of-type(2) { animation-delay: 3.3s; }
+  .proj-thumb-cleanse .ph-line:nth-of-type(3) { animation-delay: 4.3s; }
+
+  /* reading / archive chips settle in last */
+  .proj-thumb-cleanse .ph-chip { animation: cl-chip 9.5s var(--ease-out) infinite both; }
+  .proj-thumb-cleanse .ph-chip:nth-of-type(1) { animation-delay: 5.0s; }
+  .proj-thumb-cleanse .ph-chip:nth-of-type(2) { animation-delay: 5.4s; }
+}
+
+/* eyebrow / title / source: fade in with a 1px settle, then hold */
+@keyframes cl-rise {
+  0%, 2%    { opacity: 0; transform: translateY(1px); }
+  16%, 100% { opacity: 1; transform: translateY(0); }
+}
+/* summary bars: wipe in left-to-right via scaleX, faint overshoot, settle to 1 */
+@keyframes cl-fill {
+  0%, 4%    { opacity: 0.55; transform: scaleX(0); }
+  11%       { opacity: 1;    transform: scaleX(1.02); }
+  15%, 100% { opacity: 1;    transform: scaleX(1); }
+}
+/* chips settle in last with a small pop, then hold */
+@keyframes cl-chip {
+  0%, 4%    { opacity: 0; transform: scale(0.96); }
+  9%        { opacity: 1; transform: scale(1.02); }
+  13%, 100% { opacity: 1; transform: scale(1); }
 }
 
 
