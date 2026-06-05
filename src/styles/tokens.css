@@ -127,7 +127,7 @@
 
   --text-primary: #0E0E10;
   --text-muted:   #5E5E66;
-  --text-dim:     #9A9AA3;
+  --text-dim:     #6F6F78;
 
   --accent:       #2B5FC9;
   --accent-soft:  rgba(43, 95, 201, 0.10);
@@ -146,7 +146,7 @@
     --border-hover: #D6D6DB;
     --text-primary: #0E0E10;
     --text-muted:   #5E5E66;
-    --text-dim:     #9A9AA3;
+    --text-dim:     #6F6F78;
     --accent:       #2B5FC9;
     --accent-soft:  rgba(43, 95, 201, 0.10);
     --selection-bg: rgba(43, 95, 201, 0.20);

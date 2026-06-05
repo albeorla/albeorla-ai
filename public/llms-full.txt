@@ -1,0 +1,42 @@
+# Albert Orlando
+
+> Personal portfolio for Albert Orlando, a full-stack engineer in New York building Cleanse.
+
+This file collects the machine-readable text content for albeorla.ai.
+
+## Homepage
+
+# Albert Orlando
+
+Full-stack engineer. Building Cleanse. Previously, a founding engineer on Amazon Publisher Cloud. New York.
+
+### Now
+
+Building full-stack applications for the U.S. Air Force at Agile Defense, automating workflows and training procedures within piloting squadrons. Designing Cleanse end-to-end on the side. iPhone alpha soon.
+
+### Selected Work
+
+Amazon Publisher Services: founding engineer for Amazon Publisher Cloud from August 2022 to March 2025. Built it from alpha to GA into a multi-tenant data-collaboration platform serving 50+ external enterprise partners. Shipped the vendor-facing UI, backend services and APIs, AWS Clean Rooms audience-matching workflows, AWS CDK infrastructure, and on-call ownership for 99.9% service availability.
+
+PebblePost: full-stack engineer from October 2017 to August 2022. Re-architected v2 of the PDM Campaign Manager, the internal tool 800+ brands used daily. Shipped a real-time creative editor, a high-throughput web-beacon ingestion pipeline, and REST APIs used in published case studies.
+
+### Projects
+
+- Cleanse: https://cleanse.sh
+- Sparkle: https://github.com/albeorla/sparkle
+- atrp: https://github.com/albeorla/atrp
+- gitingest: https://github.com/albeorla/gitingest
+
+### Contact
+
+- Email: albertjorlando@gmail.com
+- LinkedIn: https://linkedin.com/in/albeorla
+- GitHub: https://github.com/albeorla
+
+## Privacy
+
+albeorla.ai is a static personal portfolio. It has no accounts, forms, comments, ads, analytics, tracking pixels, or payment flows.
+
+The site stores two preferences in your browser: a theme preference for the light/dark toggle and a session flag so the entrance animation does not replay on every page view. Both stay in your browser and are not sent to Albert.
+
+The site is hosted on Google Cloud Storage behind Google Cloud CDN. Google may process request metadata to serve the site, prevent abuse, and operate the network. Albert does not use that data for ads, profiling, or cross-site tracking.

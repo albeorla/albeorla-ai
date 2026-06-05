@@ -1,0 +1,12 @@
+{
+  "$schema": "https://schemas.agentskills.io/discovery/0.2.0/schema.json",
+  "skills": [
+    {
+      "name": "albeorla-ai",
+      "type": "skill-md",
+      "description": "Use when an agent needs to understand, summarize, cite, or audit the public albeorla.ai portfolio site.",
+      "url": "https://albeorla.ai/.well-known/agent-skills/albeorla-ai/SKILL.md",
+      "digest": "sha256:c1322777a491f62d5104378cde45b905630b838d8637ffdff8a7e67e1422ec50"
+    }
+  ]
+}

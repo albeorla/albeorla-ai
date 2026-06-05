@@ -5,16 +5,21 @@ import { themeInitScript } from "../lib/theme";
 interface Props {
   title?: string;
   description?: string;
+  robots?: string;
+  structuredData?: Record<string, unknown>;
 }
 
 const {
   title = "Albert Orlando",
   description = "Full-stack engineer. Building Cleanse. Previously, a founding engineer on Amazon Publisher Cloud. New York.",
+  robots = "index, follow",
+  structuredData,
 } = Astro.props;
 
 const siteUrl = "https://albeorla.ai";
 const ogImage = `${siteUrl}/og-image.png`;
 const canonical = new URL(Astro.url.pathname, siteUrl).toString();
+const structuredDataJson = structuredData ? JSON.stringify(structuredData) : undefined;
 ---
 
 <!doctype html>
@@ -24,8 +29,17 @@ const canonical = new URL(Astro.url.pathname, siteUrl).toString();
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="generator" content={Astro.generator} />
     <meta name="description" content={description} />
+    <meta name="robots" content={robots} />
+    <meta name="color-scheme" content="dark light" />
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0A0A0B" />
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#FAFAFA" />
     <link rel="canonical" href={canonical} />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" sizes="any" href="/favicon.ico" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <link rel="alternate" type="text/markdown" href="/index.md" title="Markdown version of Albert Orlando" />
+    <link rel="privacy-policy" href="/privacy/" />
 
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="Albert Orlando" />
@@ -43,6 +57,11 @@ const canonical = new URL(Astro.url.pathname, siteUrl).toString();
     <meta name="twitter:image" content={ogImage} />
 
     <title>{title}</title>
+    {
+      structuredDataJson && (
+        <script is:inline type="application/ld+json" set:html={structuredDataJson} />
+      )
+    }
     <script is:inline set:html={themeInitScript} />
     <script is:inline>
       // Pre-paint guard: hide top-level sections of <main class="page"> before

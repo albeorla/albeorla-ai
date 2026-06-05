@@ -7,9 +7,63 @@ import Projects from "../components/Projects.astro";
 import Contact from "../components/Contact.astro";
 import Footer from "../components/Footer.astro";
 import ThemeToggle from "../components/ThemeToggle.astro";
+
+const description =
+  "Full-stack engineer. Building Cleanse. Previously, a founding engineer on Amazon Publisher Cloud. New York.";
+const structuredData = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Person",
+      "@id": "https://albeorla.ai/#person",
+      name: "Albert Orlando",
+      url: "https://albeorla.ai/",
+      jobTitle: "Full-stack engineer",
+      address: {
+        "@type": "PostalAddress",
+        addressLocality: "New York",
+        addressRegion: "NY",
+        addressCountry: "US",
+      },
+      email: "mailto:albertjorlando@gmail.com",
+      sameAs: [
+        "https://github.com/albeorla",
+        "https://linkedin.com/in/albeorla",
+        "https://cleanse.sh",
+      ],
+      knowsAbout: [
+        "Full-stack engineering",
+        "Product engineering",
+        "TypeScript",
+        "React",
+        "Astro",
+        "AWS",
+      ],
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://albeorla.ai/#website",
+      url: "https://albeorla.ai/",
+      name: "Albert Orlando",
+      description,
+      inLanguage: "en",
+      publisher: { "@id": "https://albeorla.ai/#person" },
+    },
+    {
+      "@type": "ProfilePage",
+      "@id": "https://albeorla.ai/#profile",
+      url: "https://albeorla.ai/",
+      name: "Albert Orlando",
+      description,
+      inLanguage: "en",
+      isPartOf: { "@id": "https://albeorla.ai/#website" },
+      about: { "@id": "https://albeorla.ai/#person" },
+    },
+  ],
+};
 ---
 
-<BaseLayout title="Albert Orlando">
+<BaseLayout title="Albert Orlando" description={description} structuredData={structuredData}>
   <a href="#main" class="skip-link">Skip to content</a>
   <ThemeToggle />
 

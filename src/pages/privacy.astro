@@ -1,0 +1,75 @@
+---
+import ThemeToggle from "../components/ThemeToggle.astro";
+import BaseLayout from "../layouts/BaseLayout.astro";
+
+const title = "Privacy - Albert Orlando";
+const description =
+  "Privacy policy for albeorla.ai, a static personal portfolio site.";
+const structuredData = {
+  "@context": "https://schema.org",
+  "@type": "PrivacyPolicy",
+  "@id": "https://albeorla.ai/privacy/#policy",
+  url: "https://albeorla.ai/privacy/",
+  name: "Privacy policy",
+  dateModified: "2026-06-05",
+  inLanguage: "en",
+  publisher: {
+    "@type": "Person",
+    name: "Albert Orlando",
+    url: "https://albeorla.ai/",
+  },
+};
+---
+
+<BaseLayout title={title} description={description} structuredData={structuredData}>
+  <a href="#main" class="skip-link">Skip to content</a>
+  <ThemeToggle />
+
+  <main id="main" class="simple-page">
+    <h1>Privacy policy</h1>
+    <p class="simple-meta">Last updated June 5, 2026</p>
+
+    <p>
+      albeorla.ai is a static personal portfolio. It has no accounts, forms, comments, ads,
+      analytics, tracking pixels, or payment flows.
+    </p>
+
+    <h2>What this site stores</h2>
+    <p>
+      The site stores two preferences in your browser. A theme preference is saved when you
+      use the light/dark toggle. A session flag is saved so the entrance animation does not
+      replay on every page view. Both stay in your browser and are not sent to me.
+    </p>
+
+    <h2>Hosting</h2>
+    <p>
+      The site is hosted on Google Cloud Storage behind Google Cloud CDN. Google may process
+      request metadata such as IP address, user agent, requested URL, and timestamp to serve
+      the site, prevent abuse, and operate the network. I do not use that data for ads,
+      profiling, or cross-site tracking.
+    </p>
+
+    <h2>Email and external links</h2>
+    <p>
+      If you email me, I receive your email address and message so I can reply. The site also
+      links to GitHub, LinkedIn, and Cleanse; those sites have their own privacy practices.
+    </p>
+
+    <h2>Cookies and consent</h2>
+    <p>
+      This site does not set cookies. Because there are no non-essential cookies or analytics
+      scripts, there is no cookie banner.
+    </p>
+
+    <h2>Your choices</h2>
+    <p>
+      You can clear the saved theme and animation preferences by clearing site data for
+      albeorla.ai in your browser. For privacy questions, email
+      <a href="mailto:albertjorlando@gmail.com">albertjorlando@gmail.com</a>.
+    </p>
+
+    <div class="simple-actions">
+      <a class="simple-action" href="/">Back to homepage</a>
+    </div>
+  </main>
+</BaseLayout>

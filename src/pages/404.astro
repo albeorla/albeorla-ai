@@ -1,0 +1,24 @@
+---
+import ThemeToggle from "../components/ThemeToggle.astro";
+import BaseLayout from "../layouts/BaseLayout.astro";
+
+const title = "Page not found - Albert Orlando";
+const description = "This page does not exist on albeorla.ai.";
+---
+
+<BaseLayout title={title} description={description} robots="noindex, nofollow">
+  <a href="#main" class="skip-link">Skip to content</a>
+  <ThemeToggle />
+
+  <main id="main" class="simple-page">
+    <h1>Page not found</h1>
+    <p>
+      This page does not exist, or the link has moved. The homepage is the best place to get
+      back into the site.
+    </p>
+
+    <div class="simple-actions">
+      <a class="simple-action" href="/">Go to homepage</a>
+    </div>
+  </main>
+</BaseLayout>

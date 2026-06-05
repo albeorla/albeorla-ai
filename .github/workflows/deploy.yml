@@ -64,6 +64,45 @@ jobs:
             --exclude="^_assets/" \
             --cache-control="public, max-age=60, must-revalidate"
 
+      - name: Set metadata for machine-readable files
+        run: |
+          gcloud storage cp ./dist/robots.txt gs://${GCS_BUCKET}/robots.txt \
+            --content-type="text/plain; charset=utf-8" \
+            --cache-control="public, max-age=60, must-revalidate"
+          gcloud storage cp ./dist/sitemap.xml gs://${GCS_BUCKET}/sitemap.xml \
+            --content-type="application/xml; charset=utf-8" \
+            --cache-control="public, max-age=60, must-revalidate"
+          gcloud storage cp ./dist/sitemap-index.xml gs://${GCS_BUCKET}/sitemap-index.xml \
+            --content-type="application/xml; charset=utf-8" \
+            --cache-control="public, max-age=60, must-revalidate"
+          gcloud storage cp ./dist/index.md gs://${GCS_BUCKET}/index.md \
+            --content-type="text/markdown; charset=utf-8" \
+            --cache-control="public, max-age=60, must-revalidate"
+          gcloud storage cp ./dist/llms.txt gs://${GCS_BUCKET}/llms.txt \
+            --content-type="text/markdown; charset=utf-8" \
+            --cache-control="public, max-age=60, must-revalidate"
+          gcloud storage cp ./dist/llms-full.txt gs://${GCS_BUCKET}/llms-full.txt \
+            --content-type="text/markdown; charset=utf-8" \
+            --cache-control="public, max-age=60, must-revalidate"
+          gcloud storage cp ./dist/site.webmanifest gs://${GCS_BUCKET}/site.webmanifest \
+            --content-type="application/manifest+json; charset=utf-8" \
+            --cache-control="public, max-age=60, must-revalidate"
+          gcloud storage cp ./dist/favicon.ico gs://${GCS_BUCKET}/favicon.ico \
+            --content-type="image/x-icon" \
+            --cache-control="public, max-age=31536000, immutable"
+          gcloud storage cp ./dist/.well-known/security.txt gs://${GCS_BUCKET}/.well-known/security.txt \
+            --content-type="text/plain; charset=utf-8" \
+            --cache-control="public, max-age=60, must-revalidate"
+          gcloud storage cp ./dist/.well-known/api-catalog gs://${GCS_BUCKET}/.well-known/api-catalog \
+            --content-type="application/linkset+json; charset=utf-8" \
+            --cache-control="public, max-age=60, must-revalidate"
+          gcloud storage cp ./dist/.well-known/agent-skills/index.json gs://${GCS_BUCKET}/.well-known/agent-skills/index.json \
+            --content-type="application/json; charset=utf-8" \
+            --cache-control="public, max-age=60, must-revalidate"
+          gcloud storage cp ./dist/.well-known/agent-skills/albeorla-ai/SKILL.md gs://${GCS_BUCKET}/.well-known/agent-skills/albeorla-ai/SKILL.md \
+            --content-type="text/markdown; charset=utf-8" \
+            --cache-control="public, max-age=60, must-revalidate"
+
       - name: Invalidate Cloud CDN cache
         run: |
           gcloud compute url-maps invalidate-cdn-cache "${URL_MAP}" \

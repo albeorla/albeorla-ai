@@ -1,0 +1,41 @@
+{
+  "linkset": [
+    {
+      "anchor": "https://albeorla.ai/",
+      "describedby": [
+        {
+          "href": "https://albeorla.ai/llms.txt",
+          "type": "text/markdown"
+        },
+        {
+          "href": "https://albeorla.ai/index.md",
+          "type": "text/markdown"
+        }
+      ],
+      "alternate": [
+        {
+          "href": "https://albeorla.ai/llms-full.txt",
+          "type": "text/plain"
+        }
+      ],
+      "sitemap": [
+        {
+          "href": "https://albeorla.ai/sitemap.xml",
+          "type": "application/xml"
+        }
+      ],
+      "privacy-policy": [
+        {
+          "href": "https://albeorla.ai/privacy/",
+          "type": "text/html"
+        }
+      ],
+      "agent-skills": [
+        {
+          "href": "https://albeorla.ai/.well-known/agent-skills/index.json",
+          "type": "application/json"
+        }
+      ]
+    }
+  ]
+}

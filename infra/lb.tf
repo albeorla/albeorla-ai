@@ -19,17 +19,29 @@ resource "google_compute_global_address" "site_v6" {
 
 # Backend bucket with CDN enabled
 resource "google_compute_backend_bucket" "site" {
-  name        = "albeorla-ai-backend"
-  description = "Static site backend bucket for albeorla.ai"
-  bucket_name = google_storage_bucket.site.name
-  enable_cdn  = true
-  project     = var.project_id
+  name             = "albeorla-ai-backend"
+  description      = "Static site backend bucket for albeorla.ai"
+  bucket_name      = google_storage_bucket.site.name
+  enable_cdn       = true
+  project          = var.project_id
+  compression_mode = "AUTOMATIC"
+
+  custom_response_headers = [
+    "Strict-Transport-Security:max-age=63072000; includeSubDomains; preload",
+    "X-Content-Type-Options:nosniff",
+    "X-Frame-Options:DENY",
+    "Content-Security-Policy:frame-ancestors 'none'; base-uri 'none'; object-src 'none'",
+    "Referrer-Policy:strict-origin-when-cross-origin",
+    "Permissions-Policy:camera=(), microphone=(), geolocation=(), payment=(), usb=()",
+    "Access-Control-Allow-Origin:*",
+    "Link:</.well-known/api-catalog>; rel=\"api-catalog\"; type=\"application/linkset+json\", </.well-known/agent-skills/index.json>; rel=\"agent-skills\"; type=\"application/json\", </llms.txt>; rel=\"describedby\"; type=\"text/markdown\", </index.md>; rel=\"alternate\"; type=\"text/markdown\", </sitemap.xml>; rel=\"sitemap\"; type=\"application/xml\"",
+  ]
 
   cdn_policy {
     cache_mode                   = "CACHE_ALL_STATIC"
-    client_ttl                   = 3600
+    client_ttl                   = 31536000
     default_ttl                  = 3600
-    max_ttl                      = 86400
+    max_ttl                      = 31536000
     negative_caching             = true
     serve_while_stale            = 86400
     request_coalescing           = true

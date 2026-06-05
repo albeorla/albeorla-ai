@@ -151,7 +151,10 @@ section { margin-block-start: var(--space-9); }
 .section-label {
   font-family: var(--font-mono);
   font-size: 12px;
+  font-weight: var(--fw-regular);
   letter-spacing: 0.08em;
+  line-height: inherit;
+  margin: 0;
   text-transform: uppercase;
   color: var(--text-muted);
 }
@@ -776,6 +779,100 @@ section { margin-block-start: var(--space-9); }
 .site-footer .dot { padding: 0 6px; opacity: 0.6; }
 @media (max-width: 520px) {
   .site-footer { flex-direction: column; gap: 6px; align-items: flex-start; }
+}
+
+/* =====================================================================
+   SIMPLE PAGES
+   ===================================================================== */
+.simple-page {
+  position: relative;
+  z-index: 1;
+  max-width: var(--col-prose);
+  margin-inline: auto;
+  padding:
+    clamp(72px, 14vh, 144px)
+    var(--gutter)
+    calc(var(--space-8) + env(safe-area-inset-bottom, 0px));
+}
+
+.simple-page h1 {
+  font-family: var(--font-sans);
+  font-size: var(--fs-section);
+  font-weight: var(--fw-medium);
+  line-height: var(--lh-section);
+  letter-spacing: var(--ls-display);
+  margin: 0 0 var(--space-5);
+  color: var(--text-primary);
+}
+
+.simple-page h2 {
+  font-family: var(--font-mono);
+  font-size: var(--fs-label);
+  font-weight: var(--fw-regular);
+  letter-spacing: var(--ls-caps);
+  line-height: var(--lh-tight);
+  margin: var(--space-7) 0 var(--space-3);
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.simple-page p,
+.simple-page li {
+  font-size: var(--fs-body);
+  line-height: 1.7;
+  color: var(--text-primary);
+  text-wrap: pretty;
+}
+
+.simple-page p {
+  margin: 0 0 var(--space-4);
+}
+
+.simple-page ul {
+  margin: 0 0 var(--space-5);
+  padding-left: 1.2em;
+}
+
+.simple-page a {
+  color: var(--accent);
+  text-decoration: none;
+}
+
+.simple-page a:hover {
+  text-decoration: underline;
+  text-decoration-color: var(--accent);
+}
+
+.simple-meta {
+  font-family: var(--font-mono);
+  font-size: var(--fs-small);
+  color: var(--text-dim);
+  margin-bottom: var(--space-6);
+}
+
+.simple-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  margin-top: var(--space-6);
+}
+
+.simple-action {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0 var(--space-4);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--surface);
+  color: var(--text-primary);
+  font-family: var(--font-mono);
+  font-size: var(--fs-small);
+}
+
+.simple-action:hover {
+  border-color: var(--border-hover);
+  text-decoration: none;
 }
 
 /* —— Selection —— */

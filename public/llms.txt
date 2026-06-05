@@ -1,0 +1,24 @@
+# Albert Orlando
+
+> Personal portfolio for Albert Orlando, a full-stack engineer in New York building Cleanse.
+
+This is a small static site. Prefer the markdown source below when you need the page content without parsing HTML.
+
+## Primary content
+
+- [Homepage markdown](https://albeorla.ai/index.md): Profile, current work, selected work, projects, and contact links.
+- [Homepage HTML](https://albeorla.ai/): Canonical visual page.
+- [Privacy policy](https://albeorla.ai/privacy/): Data collection and browser storage notes.
+
+## Projects
+
+- [Cleanse](https://cleanse.sh): Share-target app for turning shared links into saved, summarized items.
+- [Sparkle](https://github.com/albeorla/sparkle): Local-first solo research tool.
+- [atrp](https://github.com/albeorla/atrp): Trading strategy research workbench.
+- [gitingest](https://github.com/albeorla/gitingest): Repo-to-context command-line tool.
+
+## Discovery
+
+- [Sitemap](https://albeorla.ai/sitemap.xml)
+- [API catalog](https://albeorla.ai/.well-known/api-catalog)
+- [Agent skills index](https://albeorla.ai/.well-known/agent-skills/index.json)

@@ -1,0 +1,4 @@
+Contact: mailto:albertjorlando@gmail.com
+Expires: 2027-06-05T00:00:00Z
+Preferred-Languages: en
+Canonical: https://albeorla.ai/.well-known/security.txt
