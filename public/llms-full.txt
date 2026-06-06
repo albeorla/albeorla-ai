@@ -8,15 +8,15 @@ This file collects the machine-readable text content for albeorla.ai.
 
 # Albert Orlando
 
-Full-stack engineer. Building Cleanse. Previously, a founding engineer on Amazon Publisher Cloud. New York.
+Full-stack engineer. Building Cleanse. Before that, founding engineer on Amazon Publisher Cloud. New York.
 
 ### Now
 
-Building full-stack applications for the U.S. Air Force at Agile Defense, automating workflows and training procedures within piloting squadrons. Designing Cleanse end-to-end on the side. iPhone alpha soon.
+Building full-stack applications for the U.S. Air Force at Agile Defense, automating workflows and training procedures inside piloting squadrons. Designing Cleanse end-to-end on the side. iPhone alpha soon.
 
 ### Selected Work
 
-Amazon Publisher Services: founding engineer for Amazon Publisher Cloud from August 2022 to March 2025. Built it from alpha to GA into a multi-tenant data-collaboration platform serving 50+ external enterprise partners. Shipped the vendor-facing UI, backend services and APIs, AWS Clean Rooms audience-matching workflows, AWS CDK infrastructure, and on-call ownership for 99.9% service availability.
+Amazon Publisher Services: founding engineer for Amazon Publisher Cloud from August 2022 to March 2025. Took it from alpha to GA, a multi-tenant data-collaboration platform for 50+ enterprise partners, each with role-based access, audit trails, and isolated tenant workflows. Shipped the vendor-facing UI, backend services and APIs, AWS Clean Rooms audience-matching workflows, AWS CDK infrastructure, and on-call rotation holding 99.9% availability.
 
 PebblePost: full-stack engineer from October 2017 to August 2022. Re-architected v2 of the PDM Campaign Manager, the internal tool 800+ brands used daily. Shipped a real-time creative editor, a high-throughput web-beacon ingestion pipeline, and REST APIs used in published case studies.
 

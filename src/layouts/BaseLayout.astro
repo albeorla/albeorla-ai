@@ -11,7 +11,7 @@ interface Props {
 
 const {
   title = "Albert Orlando",
-  description = "Full-stack engineer. Building Cleanse. Previously, a founding engineer on Amazon Publisher Cloud. New York.",
+  description = "Full-stack engineer. Building Cleanse. Before that, founding engineer on Amazon Publisher Cloud. New York.",
   robots = "index, follow",
   structuredData,
 } = Astro.props;
@@ -49,7 +49,7 @@ const structuredDataJson = structuredData ? JSON.stringify(structuredData) : und
     <meta property="og:image" content={ogImage} />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
-    <meta property="og:image:alt" content="Albert Orlando — albeorla.ai" />
+    <meta property="og:image:alt" content="Albert Orlando, albeorla.ai" />
 
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
