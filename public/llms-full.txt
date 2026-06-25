@@ -1,6 +1,6 @@
 # Albert Orlando
 
-> Personal portfolio for Albert Orlando, a full-stack engineer in New York building Cleanse.
+> Personal portfolio for Albert Orlando, a Senior Full-Stack Engineer in New York building Cleanse, Model Context Protocol (MCP) servers, and agentic developer tools.
 
 This file collects the machine-readable text content for albeorla.ai.
 
@@ -8,21 +8,24 @@ This file collects the machine-readable text content for albeorla.ai.
 
 # Albert Orlando
 
-Full-stack engineer. Building Cleanse. Before that, founding engineer on Amazon Publisher Cloud. New York.
+Senior Full-Stack Engineer. Building Cleanse and agentic developer tools. Founding engineer on Amazon Publisher Cloud. New York.
 
 ### Now
 
-Building full-stack applications for the U.S. Air Force at Agile Defense, automating workflows and training procedures inside piloting squadrons. Designing Cleanse end-to-end on the side. iPhone alpha soon.
+Senior Full-Stack Engineer at Agile Defense since January 2026, building full-stack applications for the U.S. Air Force that automate workflows and training procedures inside piloting squadrons. Previously founder and independent engineer from March 2025 to December 2025, building Cleanse, Model Context Protocol (MCP) servers, and developer agents on top of Claude and Gemini.
 
 ### Selected Work
 
-Amazon Publisher Services: founding engineer for Amazon Publisher Cloud from August 2022 to March 2025. Took it from alpha to GA, a multi-tenant data-collaboration platform for 50+ enterprise partners, each with role-based access, audit trails, and isolated tenant workflows. Shipped the vendor-facing UI, backend services and APIs, AWS Clean Rooms audience-matching workflows, AWS CDK infrastructure, and on-call rotation holding 99.9% availability.
+Founder & Independent Engineer: self-directed research from March 2025 to December 2025. Founded Cleanse, a share-target app that turns any shared link, post, or video into a source-preserved summarized item; live iPhone alpha, built end-to-end. Built open-source research and developer tooling, including Sparkle and gitingest; shipped Model Context Protocol (MCP) servers and agent tooling on top of Claude and Gemini.
 
-PebblePost: full-stack engineer from October 2017 to August 2022. Re-architected v2 of the PDM Campaign Manager, the internal tool 800+ brands used daily. Shipped a real-time creative editor, a high-throughput web-beacon ingestion pipeline, and REST APIs used in published case studies.
+Amazon Publisher Services: one of the founding engineers on Amazon Publisher Cloud from August 2022 to March 2025. Helped build it from alpha through GA into a multi-tenant data-collaboration platform for 50+ enterprise partners, each with role-based access, audit trails, and isolated tenant workflows. Shipped the vendor-facing UI, backend services and APIs, AWS Clean Rooms audience-matching workflows with data-quality checks, AWS CDK infrastructure, and on-call rotation holding 99.9% availability.
+
+PebblePost: full-stack engineer from October 2017 to August 2022. Re-architected v2 of the PDM Campaign Manager, the internal tool 800+ brands used daily. Shipped a real-time creative editor, a high-throughput web-beacon ingestion pipeline, and REST APIs powering campaigns that drove up to 167% conversion lift in published case studies.
 
 ### Projects
 
-- Cleanse: https://cleanse.sh
+- Cleanse: https://cleanse.sh - share-target app for turning shared links, posts, or videos into source-preserved summarized items; live iPhone alpha.
+- personal-finance-agent: https://github.com/albeorla/personal-finance-agent - local MCP server for evidence-backed personal finance workflows.
 - Sparkle: https://github.com/albeorla/sparkle
 - atrp: https://github.com/albeorla/atrp
 - gitingest: https://github.com/albeorla/gitingest

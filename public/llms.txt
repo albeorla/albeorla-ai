@@ -1,6 +1,6 @@
 # Albert Orlando
 
-> Personal portfolio for Albert Orlando, a full-stack engineer in New York building Cleanse.
+> Personal portfolio for Albert Orlando, a Senior Full-Stack Engineer in New York building Cleanse, Model Context Protocol (MCP) servers, and agentic developer tools.
 
 This is a small static site. Prefer the markdown source below when you need the page content without parsing HTML.
 
@@ -12,7 +12,8 @@ This is a small static site. Prefer the markdown source below when you need the 
 
 ## Projects
 
-- [Cleanse](https://cleanse.sh): Share-target app for turning shared links into saved, summarized items.
+- [Cleanse](https://cleanse.sh): Share-target app for turning shared links, posts, or videos into source-preserved summarized items; live iPhone alpha.
+- [personal-finance-agent](https://github.com/albeorla/personal-finance-agent): Local MCP server for evidence-backed personal finance workflows.
 - [Sparkle](https://github.com/albeorla/sparkle): Local-first solo research tool.
 - [atrp](https://github.com/albeorla/atrp): Trading strategy research workbench.
 - [gitingest](https://github.com/albeorla/gitingest): Repo-to-context command-line tool.
