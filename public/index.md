@@ -56,3 +56,4 @@ What shipped:
 - Email: <albertjorlando@gmail.com>
 - LinkedIn: <https://linkedin.com/in/albeorla>
 - GitHub: <https://github.com/albeorla>
+- X: <https://x.com/albeorla>
