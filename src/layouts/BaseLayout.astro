@@ -34,6 +34,8 @@ const structuredDataJson = structuredData ? JSON.stringify(structuredData) : und
     <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0A0A0B" />
     <meta name="theme-color" media="(prefers-color-scheme: light)" content="#FAFAFA" />
     <link rel="canonical" href={canonical} />
+    <link rel="preload" href="/fonts/Geist-Variable.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/GeistMono-Variable.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="icon" sizes="any" href="/favicon.ico" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
@@ -67,16 +69,21 @@ const structuredDataJson = structuredData ? JSON.stringify(structuredData) : und
     <script is:inline>
       // Pre-paint guard: hide top-level sections of <main class="page"> before
       // Motion 12 animates them in. Runs synchronously in <head> so children
-      // never flash visible. Skipped on reduced motion or after first session
-      // visit so the page renders instantly.
+      // never flash visible. Skipped on reduced motion or after the first-ever
+      // visit so the page renders instantly. A 1200ms fallback force-reveals
+      // everything in case the Motion chunk below ever fails to load, so a
+      // broken script can never leave the page blank.
       (function () {
         try {
-          var entered = sessionStorage.getItem("albeorla-ai-entered");
+          var entered = localStorage.getItem("albeorla-ai-entered");
           var reduced =
             window.matchMedia &&
             window.matchMedia("(prefers-reduced-motion: reduce)").matches;
           if (!entered && !reduced) {
             document.documentElement.setAttribute("data-page-entering", "1");
+            setTimeout(function () {
+              document.documentElement.removeAttribute("data-page-entering");
+            }, 1200);
           }
         } catch (_) {}
       })();
@@ -91,7 +98,7 @@ const structuredDataJson = structuredData ? JSON.stringify(structuredData) : und
   <body>
     <slot />
     <script>
-      // Motion 12 staggered fade-up on first session visit. Targets the direct
+      // Motion 12 staggered fade-up on the first-ever visit. Targets the direct
       // children of <main class="page"> (Hero, Now, Work, Projects, Contact,
       // Footer). 60ms stagger, 300ms duration, 20px rise, ease-out matching
       // the design token. Reduced motion: show everything immediately.
@@ -114,7 +121,7 @@ const structuredDataJson = structuredData ? JSON.stringify(structuredData) : und
 
         let entered = false;
         try {
-          entered = sessionStorage.getItem("albeorla-ai-entered") === "1";
+          entered = localStorage.getItem("albeorla-ai-entered") === "1";
         } catch (_) {}
 
         const reduced =
@@ -127,7 +134,7 @@ const structuredDataJson = structuredData ? JSON.stringify(structuredData) : und
         }
 
         try {
-          sessionStorage.setItem("albeorla-ai-entered", "1");
+          localStorage.setItem("albeorla-ai-entered", "1");
         } catch (_) {}
 
         // Match --ease-out token: cubic-bezier(0.22, 0.61, 0.36, 1).

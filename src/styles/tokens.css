@@ -74,7 +74,6 @@
 
   /* —— Layout —— */
   --col-prose:  680px;
-  --col-media:  960px;
   --gutter:     clamp(24px, 5vw, 96px);
 
   /* —— Radii —— */
@@ -177,64 +176,11 @@ body { background: var(--bg); }
   color: var(--selection-fg);
 }
 
-/* —— Utility text classes (typography roles) —— */
-.t-hero {
-  font-family: var(--font-sans);
-  font-size: var(--fs-hero);
-  font-weight: var(--fw-medium);
-  line-height: var(--lh-hero);
-  letter-spacing: var(--ls-hero);
-  color: var(--text-primary);
-}
-.t-section {
-  font-family: var(--font-sans);
-  font-size: var(--fs-section);
-  font-weight: var(--fw-medium);
-  line-height: var(--lh-section);
-  letter-spacing: var(--ls-display);
-  color: var(--text-primary);
-}
-.t-body {
-  font-family: var(--font-sans);
-  font-size: var(--fs-body);
-  font-weight: var(--fw-regular);
-  line-height: var(--lh-body);
-  color: var(--text-primary);
-  text-wrap: pretty;
-}
-.t-small {
-  font-family: var(--font-sans);
-  font-size: var(--fs-small);
-  line-height: var(--lh-tight);
-  color: var(--text-muted);
-}
-.t-eyebrow {
-  font-family: var(--font-mono);
-  font-size: var(--fs-label);
-  font-weight: var(--fw-regular);
-  letter-spacing: var(--ls-caps);
-  color: var(--text-muted);
-  text-transform: uppercase;
-}
-.t-micro {
-  font-family: var(--font-mono);
-  font-size: var(--fs-micro);
-  line-height: 1.4;
-  color: var(--text-dim);
-}
-.t-mono {
-  font-family: var(--font-mono);
-  font-size: var(--fs-small);
-  color: var(--text-muted);
-}
-
 /* =====================================================================
    4. UTILITIES
    ===================================================================== */
-.col-prose { max-width: var(--col-prose); margin-inline: auto; }
-.col-media { max-width: var(--col-media); margin-inline: auto; }
 
-a, .link {
+a {
   color: inherit;
   text-decoration: none;
   text-underline-offset: 4px;
@@ -242,17 +188,9 @@ a, .link {
   transition: color var(--dur-hover) var(--ease-out),
               text-decoration-color var(--dur-hover) var(--ease-out);
 }
-a:hover, .link:hover {
+a:hover {
   text-decoration: underline;
   text-decoration-color: currentColor;
-}
-a.accent { color: var(--accent); }
-a.accent:hover { text-decoration-color: var(--accent); }
-
-.link-external::after {
-  content: " ↗";
-  font-family: var(--font-mono);
-  color: var(--text-muted);
 }
 
 :focus-visible {

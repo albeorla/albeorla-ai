@@ -58,7 +58,7 @@ body::before {
 
 /* —— Theme toggle —— */
 .theme-toggle {
-  position: fixed;
+  position: absolute;
   top: 24px;
   right: 24px;
   width: 36px;
@@ -83,6 +83,13 @@ body::before {
 
 /* —— Sections —— */
 section { margin-block-start: var(--space-9); }
+section[id] { scroll-margin-top: var(--space-5); }
+
+/* In-page anchor links (hero -> #projects) glide instead of teleporting.
+   Reduced-motion users keep instant jumps. */
+@media (prefers-reduced-motion: no-preference) {
+  html { scroll-behavior: smooth; }
+}
 
 /* —— Entry animation: Motion 12 stagger fade-up runs from BaseLayout. ——
    Pre-paint hiding is inlined in <head> there to prevent first-paint flash. */
@@ -112,7 +119,7 @@ section { margin-block-start: var(--space-9); }
   line-height: 1.55;
   color: var(--text-primary);
   margin: 0 0 18px;
-  max-width: 30ch;
+  max-width: 38ch;
   text-wrap: pretty;
 }
 .hero-accent {
@@ -121,15 +128,6 @@ section { margin-block-start: var(--space-9); }
   text-underline-offset: 4px;
 }
 .hero-accent:hover { text-decoration: underline; text-decoration-color: var(--accent); }
-.hero-sub {
-  font-family: var(--font-mono);
-  font-size: 12px;
-  letter-spacing: 0;
-  color: var(--text-muted);
-  margin: 0;
-  text-transform: lowercase;
-}
-.hero-sub .dot { color: var(--text-dim); padding: 0 6px; }
 .hero-status {
   display: inline-flex;
   align-items: center;
@@ -393,6 +391,14 @@ section { margin-block-start: var(--space-9); }
 }
 .proj-link-label { color: var(--text-primary); }
 
+/* Arrow nudge on card hover — the one "this is a link" affordance,
+   inside the 150ms hover budget. */
+.proj-arrow {
+  display: inline-block;
+  transition: transform var(--dur-hover) var(--ease-out);
+}
+.proj:hover .proj-arrow { transform: translateX(3px); }
+
 /* —— Cleanse thumbnail: tiny phone frame —— */
 .proj-thumb-cleanse {
   background:
@@ -491,24 +497,27 @@ section { margin-block-start: var(--space-9); }
 /* —— gitingest thumbnail: ambient typing run ——
    Command + output lines reveal in sequence, the token count firms up,
    "clipboard ✓" lands last, then the caret blinks through a long held rest
-   before the loop quietly resets. 10.5s total.
-   Gated behind no-preference so reduced-motion (and the global reduce rule)
-   simply render the finished terminal: every base state above already equals
-   its resolved frame (all lines visible, caret solid). transform/opacity only. */
+   and ends solid. Plays exactly once (10.5s) when the thumbnail first
+   scrolls into view — [data-inview="1"] is set by the observer in
+   Projects.astro — then holds the finished frame forever.
+   Also gated behind no-preference so reduced-motion (and the global reduce
+   rule) simply render the finished terminal: every base state above already
+   equals its resolved frame (all lines visible, caret solid).
+   transform/opacity only. */
 @media (prefers-reduced-motion: no-preference) {
   /* Lines settle in once on a gentle stagger (fade + 2px upward drift). */
-  .proj-thumb-gitingest .cli-line { animation: gi-line 10.5s var(--ease-out) infinite both; }
-  .proj-thumb-gitingest .cli-line:nth-child(1) { animation-delay: 0.2s; }
-  .proj-thumb-gitingest .cli-line:nth-child(2) { animation-delay: 1.0s; }
-  .proj-thumb-gitingest .cli-line:nth-child(3) { animation-delay: 1.8s; }
-  .proj-thumb-gitingest .cli-line:nth-child(4) { animation-delay: 2.6s; }
+  .proj-thumb-gitingest[data-inview="1"] .cli-line { animation: gi-line 10.5s var(--ease-out) 1 both; }
+  .proj-thumb-gitingest[data-inview="1"] .cli-line:nth-child(1) { animation-delay: 0.2s; }
+  .proj-thumb-gitingest[data-inview="1"] .cli-line:nth-child(2) { animation-delay: 1.0s; }
+  .proj-thumb-gitingest[data-inview="1"] .cli-line:nth-child(3) { animation-delay: 1.8s; }
+  .proj-thumb-gitingest[data-inview="1"] .cli-line:nth-child(4) { animation-delay: 2.6s; }
   /* Prompt line lands last (~3.8s); after it, nothing moves but the caret. */
-  .proj-thumb-gitingest .cli-line:nth-child(5) { animation-delay: 3.4s; }
+  .proj-thumb-gitingest[data-inview="1"] .cli-line:nth-child(5) { animation-delay: 3.4s; }
   /* Token count firms up just behind its line, then settles. */
-  .proj-thumb-gitingest .cli-line:nth-child(4) .num { animation: gi-num 10.5s var(--ease-out) infinite both; animation-delay: 2.6s; }
-  /* Caret stays hidden through the reveal, then blinks slowly across the long
+  .proj-thumb-gitingest[data-inview="1"] .cli-line:nth-child(4) .num { animation: gi-num 10.5s var(--ease-out) 1 both; animation-delay: 2.6s; }
+  /* Caret stays hidden through the reveal, then blinks slowly across the
      held rest (~4.3s-10.5s) and ends solid so the base frame is the caret. */
-  .proj-thumb-gitingest .cli-caret { animation: gi-caret 10.5s steps(1, end) infinite both; }
+  .proj-thumb-gitingest[data-inview="1"] .cli-caret { animation: gi-caret 10.5s steps(1, end) 1 both; }
 }
 @keyframes gi-line {
   0%, 1%   { opacity: 0; transform: translateY(2px); }
@@ -703,21 +712,24 @@ section { margin-block-start: var(--space-9); }
   margin-left: auto;
 }
 
-/* Ambient loop: reject marks stamp in sequence, the verdict settles, then a held rest.
-   Gated behind no-preference so reduced-motion just renders the finished ledger above
-   (every element's base state already equals its resolved frame). transform/opacity only. */
+/* Ambient sequence: reject marks stamp in sequence, the verdict settles, then
+   everything holds. Plays exactly once (9s) when the thumbnail first scrolls
+   into view — [data-inview="1"] is set by the observer in Projects.astro —
+   then holds the finished frame forever. Gated behind no-preference so
+   reduced-motion just renders the finished ledger above (every element's
+   base state already equals its resolved frame). transform/opacity only. */
 @media (prefers-reduced-motion: no-preference) {
-  .proj-thumb-atrp .ledger-mark { animation: atrp-stamp 9s var(--ease-out) infinite both; }
-  .proj-thumb-atrp .ledger-stat { animation: atrp-stat 9s var(--ease-out) infinite both; }
-  .proj-thumb-atrp .ledger-row:nth-child(1) .ledger-mark,
-  .proj-thumb-atrp .ledger-row:nth-child(1) .ledger-stat { animation-delay: 0.6s; }
-  .proj-thumb-atrp .ledger-row:nth-child(2) .ledger-mark,
-  .proj-thumb-atrp .ledger-row:nth-child(2) .ledger-stat { animation-delay: 1.3s; }
-  .proj-thumb-atrp .ledger-row:nth-child(3) .ledger-mark,
-  .proj-thumb-atrp .ledger-row:nth-child(3) .ledger-stat { animation-delay: 2.0s; }
-  .proj-thumb-atrp .ledger-row:nth-child(4) .ledger-mark,
-  .proj-thumb-atrp .ledger-row:nth-child(4) .ledger-stat { animation-delay: 2.7s; }
-  .proj-thumb-atrp .vmark { animation: atrp-verdict 9s var(--ease-out) infinite both; animation-delay: 3.4s; }
+  .proj-thumb-atrp[data-inview="1"] .ledger-mark { animation: atrp-stamp 9s var(--ease-out) 1 both; }
+  .proj-thumb-atrp[data-inview="1"] .ledger-stat { animation: atrp-stat 9s var(--ease-out) 1 both; }
+  .proj-thumb-atrp[data-inview="1"] .ledger-row:nth-child(1) .ledger-mark,
+  .proj-thumb-atrp[data-inview="1"] .ledger-row:nth-child(1) .ledger-stat { animation-delay: 0.6s; }
+  .proj-thumb-atrp[data-inview="1"] .ledger-row:nth-child(2) .ledger-mark,
+  .proj-thumb-atrp[data-inview="1"] .ledger-row:nth-child(2) .ledger-stat { animation-delay: 1.3s; }
+  .proj-thumb-atrp[data-inview="1"] .ledger-row:nth-child(3) .ledger-mark,
+  .proj-thumb-atrp[data-inview="1"] .ledger-row:nth-child(3) .ledger-stat { animation-delay: 2.0s; }
+  .proj-thumb-atrp[data-inview="1"] .ledger-row:nth-child(4) .ledger-mark,
+  .proj-thumb-atrp[data-inview="1"] .ledger-row:nth-child(4) .ledger-stat { animation-delay: 2.7s; }
+  .proj-thumb-atrp[data-inview="1"] .vmark { animation: atrp-verdict 9s var(--ease-out) 1 both; animation-delay: 3.4s; }
 }
 
 @keyframes atrp-stamp {
@@ -732,8 +744,7 @@ section { margin-block-start: var(--space-9); }
 @keyframes atrp-verdict {
   0%, 37%   { opacity: 0.5;  transform: scale(0.98); }
   41%       { opacity: 1;    transform: scale(1.05); }
-  46%, 62%  { opacity: 1;    transform: scale(1); }
-  72%, 100% { opacity: 0.82; transform: scale(1); }
+  46%, 100% { opacity: 1;    transform: scale(1); }
 }
 
 /* —— sparkle thumbnail: knowledge graph "thinking" ——
@@ -741,55 +752,56 @@ section { margin-block-start: var(--space-9); }
    root -> the evidence/objection hubs -> the sub-nodes -> the accent leaves;
    each node gives a tiny swell as the front arrives (the leaves bloom a soft
    accent glow), each edge warms toward the accent a beat before the front
-   crosses it, then the whole graph holds dead-still for ~2.2s before
-   repeating. 8s total.
+   crosses it, then the whole graph holds dead-still. Plays exactly once
+   (8s) when the thumbnail first scrolls into view — [data-inview="1"] is
+   set by the observer in Projects.astro — then holds the finished frame.
    Gated behind no-preference; every base state above already equals the
    resolved/finished frame (full opacity, scale 1, normal border-hover stroke),
    so reduced-motion users and the global reduce rule simply see the static,
    fully-revealed graph. transform / opacity / stroke + filter only — no
-   layout properties, no JS. */
+   layout properties. */
 @media (prefers-reduced-motion: no-preference) {
-  .proj-thumb-sparkle .graph-nodes circle {
+  .proj-thumb-sparkle[data-inview="1"] .graph-nodes circle {
     transform-box: fill-box;
     transform-origin: center;
-    animation: sparkle-node 8s var(--ease-out) infinite both;
+    animation: sparkle-node 8s var(--ease-out) 1 both;
   }
-  .proj-thumb-sparkle .graph-edges line {
-    animation: sparkle-edge 8s var(--ease-out) infinite both;
+  .proj-thumb-sparkle[data-inview="1"] .graph-edges line {
+    animation: sparkle-edge 8s var(--ease-out) 1 both;
   }
-  .proj-thumb-sparkle .graph-nodes circle.leaf {
+  .proj-thumb-sparkle[data-inview="1"] .graph-nodes circle.leaf {
     transform-box: fill-box;
     transform-origin: center;
-    animation: sparkle-leaf 8s var(--ease-out) infinite both;
+    animation: sparkle-leaf 8s var(--ease-out) 1 both;
   }
 
   /* Pulse front, claim root -> leaves. Nodes swell as the front arrives;
      each edge warms a beat earlier, just as the front crosses it. */
   /* root claim */
-  .proj-thumb-sparkle .graph-nodes circle:nth-of-type(1) { animation-delay: 0.30s; }
+  .proj-thumb-sparkle[data-inview="1"] .graph-nodes circle:nth-of-type(1) { animation-delay: 0.30s; }
   /* root -> hub edges */
-  .proj-thumb-sparkle .graph-edges line:nth-of-type(1),
-  .proj-thumb-sparkle .graph-edges line:nth-of-type(2) { animation-delay: 0.55s; }
+  .proj-thumb-sparkle[data-inview="1"] .graph-edges line:nth-of-type(1),
+  .proj-thumb-sparkle[data-inview="1"] .graph-edges line:nth-of-type(2) { animation-delay: 0.55s; }
   /* evidence / objection hubs */
-  .proj-thumb-sparkle .graph-nodes circle:nth-of-type(2),
-  .proj-thumb-sparkle .graph-nodes circle:nth-of-type(3) { animation-delay: 0.95s; }
+  .proj-thumb-sparkle[data-inview="1"] .graph-nodes circle:nth-of-type(2),
+  .proj-thumb-sparkle[data-inview="1"] .graph-nodes circle:nth-of-type(3) { animation-delay: 0.95s; }
   /* hub -> sub-node edges */
-  .proj-thumb-sparkle .graph-edges line:nth-of-type(3),
-  .proj-thumb-sparkle .graph-edges line:nth-of-type(4),
-  .proj-thumb-sparkle .graph-edges line:nth-of-type(5),
-  .proj-thumb-sparkle .graph-edges line:nth-of-type(6) { animation-delay: 1.30s; }
+  .proj-thumb-sparkle[data-inview="1"] .graph-edges line:nth-of-type(3),
+  .proj-thumb-sparkle[data-inview="1"] .graph-edges line:nth-of-type(4),
+  .proj-thumb-sparkle[data-inview="1"] .graph-edges line:nth-of-type(5),
+  .proj-thumb-sparkle[data-inview="1"] .graph-edges line:nth-of-type(6) { animation-delay: 1.30s; }
   /* sub-nodes */
-  .proj-thumb-sparkle .graph-nodes circle:nth-of-type(4),
-  .proj-thumb-sparkle .graph-nodes circle:nth-of-type(5),
-  .proj-thumb-sparkle .graph-nodes circle:nth-of-type(6),
-  .proj-thumb-sparkle .graph-nodes circle:nth-of-type(7) { animation-delay: 1.75s; }
+  .proj-thumb-sparkle[data-inview="1"] .graph-nodes circle:nth-of-type(4),
+  .proj-thumb-sparkle[data-inview="1"] .graph-nodes circle:nth-of-type(5),
+  .proj-thumb-sparkle[data-inview="1"] .graph-nodes circle:nth-of-type(6),
+  .proj-thumb-sparkle[data-inview="1"] .graph-nodes circle:nth-of-type(7) { animation-delay: 1.75s; }
   /* sub-node -> leaf edges */
-  .proj-thumb-sparkle .graph-edges line:nth-of-type(7),
-  .proj-thumb-sparkle .graph-edges line:nth-of-type(8) { animation-delay: 2.30s; }
+  .proj-thumb-sparkle[data-inview="1"] .graph-edges line:nth-of-type(7),
+  .proj-thumb-sparkle[data-inview="1"] .graph-edges line:nth-of-type(8) { animation-delay: 2.30s; }
   /* accent leaves (these also match circle:nth-of-type(8),(9); the .leaf rule's
      glowing sparkle-leaf animation wins the cascade over the generic node one) */
-  .proj-thumb-sparkle .graph-nodes circle:nth-of-type(8),
-  .proj-thumb-sparkle .graph-nodes circle:nth-of-type(9) { animation-delay: 2.75s; }
+  .proj-thumb-sparkle[data-inview="1"] .graph-nodes circle:nth-of-type(8),
+  .proj-thumb-sparkle[data-inview="1"] .graph-nodes circle:nth-of-type(9) { animation-delay: 2.75s; }
 }
 
 /* base = resolved (scale 1); the pulse adds a 4% swell, then settles back */
@@ -816,27 +828,29 @@ section { margin-block-start: var(--space-9); }
    Ambient loop. A shared item resolves top-to-bottom like the app finishing its
    work: the timestamp + title + source settle in, the three summary bars wipe in
    left-to-right line by line (as if being summarized), then the reading/archive
-   chips settle in last. Everything resolves by ~6.5s and holds dead-still for ~2.8s
-   before repeating. 9.5s total.
+   chips settle in last. Everything resolves by ~6.5s and holds dead-still.
+   Plays exactly once (9.5s) when the thumbnail first scrolls into view —
+   [data-inview="1"] is set by the observer in Projects.astro — then holds
+   the finished frame forever.
    Gated behind no-preference; every element's BASE css already equals its finished
    frame (opacity 1, scale 1, full-width bars), so reduced-motion users and the site's
    global reduce rule simply see the static thumbnail. transform + opacity only;
    bars "fill" via scaleX from the existing transform-origin:left, never width. */
 @media (prefers-reduced-motion: no-preference) {
-  .proj-thumb-cleanse .ph-eyebrow { animation: cl-rise 9.5s var(--ease-out) infinite both; }
-  .proj-thumb-cleanse .ph-title   { animation: cl-rise 9.5s var(--ease-out) infinite both; animation-delay: 0.4s; }
-  .proj-thumb-cleanse .ph-source  { animation: cl-rise 9.5s var(--ease-out) infinite both; animation-delay: 0.9s; }
+  .proj-thumb-cleanse[data-inview="1"] .ph-eyebrow { animation: cl-rise 9.5s var(--ease-out) 1 both; }
+  .proj-thumb-cleanse[data-inview="1"] .ph-title   { animation: cl-rise 9.5s var(--ease-out) 1 both; animation-delay: 0.4s; }
+  .proj-thumb-cleanse[data-inview="1"] .ph-source  { animation: cl-rise 9.5s var(--ease-out) 1 both; animation-delay: 0.9s; }
 
   /* the summarize step: bars wipe in left-to-right, line by line */
-  .proj-thumb-cleanse .ph-line { animation: cl-fill 9.5s var(--ease-out) infinite both; }
-  .proj-thumb-cleanse .ph-line:nth-of-type(1) { animation-delay: 2.3s; }
-  .proj-thumb-cleanse .ph-line:nth-of-type(2) { animation-delay: 3.3s; }
-  .proj-thumb-cleanse .ph-line:nth-of-type(3) { animation-delay: 4.3s; }
+  .proj-thumb-cleanse[data-inview="1"] .ph-line { animation: cl-fill 9.5s var(--ease-out) 1 both; }
+  .proj-thumb-cleanse[data-inview="1"] .ph-line:nth-of-type(1) { animation-delay: 2.3s; }
+  .proj-thumb-cleanse[data-inview="1"] .ph-line:nth-of-type(2) { animation-delay: 3.3s; }
+  .proj-thumb-cleanse[data-inview="1"] .ph-line:nth-of-type(3) { animation-delay: 4.3s; }
 
   /* reading / archive chips settle in last */
-  .proj-thumb-cleanse .ph-chip { animation: cl-chip 9.5s var(--ease-out) infinite both; }
-  .proj-thumb-cleanse .ph-chip:nth-of-type(1) { animation-delay: 5.0s; }
-  .proj-thumb-cleanse .ph-chip:nth-of-type(2) { animation-delay: 5.4s; }
+  .proj-thumb-cleanse[data-inview="1"] .ph-chip { animation: cl-chip 9.5s var(--ease-out) 1 both; }
+  .proj-thumb-cleanse[data-inview="1"] .ph-chip:nth-of-type(1) { animation-delay: 5.0s; }
+  .proj-thumb-cleanse[data-inview="1"] .ph-chip:nth-of-type(2) { animation-delay: 5.4s; }
 }
 
 /* eyebrow / title / source: fade in with a 1px settle, then hold */
@@ -888,6 +902,17 @@ section { margin-block-start: var(--space-9); }
   content: " ↗";
   font-family: var(--font-mono);
   color: var(--text-muted);
+}
+
+/* Thumb-sized tap targets on touch screens (~44px rows). */
+@media (pointer: coarse) {
+  .contact { gap: 6px; }
+  .contact-row { align-items: center; }
+  .contact-value {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+  }
 }
 
 /* =====================================================================
@@ -1002,10 +1027,4 @@ section { margin-block-start: var(--space-9); }
 .simple-action:hover {
   border-color: var(--border-hover);
   text-decoration: none;
-}
-
-/* —— Selection —— */
-::selection {
-  background: var(--selection-bg);
-  color: var(--selection-fg);
 }
