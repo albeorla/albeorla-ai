@@ -52,7 +52,6 @@ Node >= 20 required. Bun 1.3+ recommended.
 .
 +-- public/                 static passthrough, copied to the bucket as-is
 |   +-- fonts/              self-hosted Geist + Geist Mono variable woff2
-|   +-- icons/              inline-able SVGs (social, arrow, sun/moon)
 |   +-- .well-known/        security.txt, api-catalog, agent-skills/
 |   +-- robots.txt, sitemap*.xml, llms.txt, llms-full.txt, index.md
 +-- src/
