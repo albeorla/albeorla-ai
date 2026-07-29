@@ -1,6 +1,6 @@
 # Build the Astro site and publish it to GCS, then invalidate the
-# Cloud CDN cache. Workflow is intentionally inactive until secrets are
-# wired in — see infra/README.md.
+# Cloud CDN cache. Auth is Workload Identity Federation via the
+# GCP_WIF_PROVIDER and GCP_DEPLOY_SA repo secrets. See infra/README.md.
 name: deploy
 
 on:

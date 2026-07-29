@@ -14,7 +14,7 @@ output "lb_ipv6" {
 }
 
 output "name_servers" {
-  description = "Cloud DNS name servers. Set these at the Name.com registrar for albeorla.ai."
+  description = "Cloud DNS name servers. Already delegated; set these in the Vercel domain settings for albeorla.ai if the delegation is ever reset."
   value       = google_dns_managed_zone.site.name_servers
 }
 

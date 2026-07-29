@@ -1,40 +1,30 @@
 # Infrastructure — albeorla.ai
 
-## Current state (2026-05-27)
+## Current state (verified 2026-07-29)
 
-Bootstrap and first `terraform apply` are complete. The site stack is
-live on GCP but cannot serve traffic until the registrar nameserver
-swap at Vercel (domain management UI) is done.
+Everything below is applied and serving. `https://albeorla.ai` returns
+200 over HTTPS, and GitHub Actions has been deploying to the bucket on
+every push to `main` since 2026-05-27.
 
-- GCP project: `albeorla-ai-site` — applied ✓
-- Billing account `012A77-3EB40A-DD7869` linked — applied ✓
+- GCP project: `albeorla-ai-site` - applied
+- Billing account `012A77-3EB40A-DD7869` linked - applied
 - APIs enabled (cloudresourcemanager, iam, serviceusage, storage,
-  compute, dns, certificatemanager) — applied ✓
+  compute, dns, certificatemanager) - applied
 - Terraform state bucket `gs://albeorla-ai-tfstate` (us-central1,
-  uniform access, versioning on) — applied ✓
-- Terraform: 26 resources created (GCS site bucket, global LB v4/v6,
-  Cloud CDN, HTTP->HTTPS redirect, managed SSL cert, Cloud DNS zone,
-  A/AAAA/CAA records).
+  uniform access, versioning on) - applied
+- Terraform: GCS site bucket, global LB v4/v6, Cloud CDN, HTTP->HTTPS
+  redirect, managed SSL cert, Cloud DNS zone, A/AAAA/CAA records, plus
+  the WIF resources in `wif.tf`.
 - LB IPv4: `8.233.161.192`
 - LB IPv6: `2600:1901:0:c7e7::`
-- Managed SSL cert: `albeorla-ai-cert` — `PROVISIONING` (expected; will
-  stay pending until the NS swap below propagates).
+- Managed SSL cert: `albeorla-ai-cert` - `ACTIVE`
+- Nameservers: cut over from Vercel to Google Cloud DNS
+  (`ns-cloud-b1..b4.googledomains.com.`) - done
+- Repo secrets `GCP_WIF_PROVIDER` and `GCP_DEPLOY_SA` - set
 
-### Name servers to set at Vercel (domain management UI)
+### Verification commands
 
-Replace the current Vercel nameservers on `albeorla.ai` with these four
-Google Cloud DNS nameservers:
-
-```
-ns-cloud-b1.googledomains.com.
-ns-cloud-b2.googledomains.com.
-ns-cloud-b3.googledomains.com.
-ns-cloud-b4.googledomains.com.
-```
-
-### Post-NS-swap verification
-
-After saving the NS change at Vercel (domain management UI), run these to confirm:
+To re-confirm any of the above:
 
 ```bash
 # 1. Confirm public DNS is now pointing at Google's nameservers.
@@ -45,8 +35,7 @@ dig +short A albeorla.ai
 dig +short AAAA albeorla.ai
 dig +short A www.albeorla.ai
 
-# 3. Watch the managed cert flip PROVISIONING -> ACTIVE
-#    (usually 15-60 min after DNS propagates, can take a few hours).
+# 3. Check the managed cert (should report ACTIVE).
 gcloud compute ssl-certificates describe albeorla-ai-cert \
   --global --project=albeorla-ai-site \
   --format="value(managed.status,managed.domainStatus)"
@@ -54,8 +43,6 @@ gcloud compute ssl-certificates describe albeorla-ai-cert \
 # 4. List all certs for the project (sanity check).
 gcloud compute ssl-certificates list --project=albeorla-ai-site
 ```
-
-When the cert reports `ACTIVE` the site will serve over HTTPS.
 
 ---
 
@@ -75,32 +62,32 @@ Terraform configuration that provisions a static-site stack on GCP for
 State lives in a GCS bucket (`albeorla-ai-tfstate`) with versioning
 enabled. The state bucket is bootstrapped out-of-band — see below.
 
-## Heads-up on the registrar (READ THIS FIRST)
+## Registrar history (done, kept for context)
 
-The brief assumed the domain was in Google Domains / Cloud DNS. It is
-not. As of 2026-05-27:
+The original brief assumed the domain lived in Google Domains / Cloud
+DNS. It did not. The domain is registered through **Vercel** (which
+resells via Name.com under the hood), and the user-facing surface for
+DNS and nameserver changes is the Vercel dashboard at
+vercel.com/<team>/domains.
 
-- Domain managed via **Vercel** (Vercel resells through Name.com under
-  the hood, but the user-facing surface for DNS / NS changes is the
-  Vercel dashboard at vercel.com/<team>/domains).
-- Active nameservers: `ns1.vercel-dns.com`, `ns2.vercel-dns.com`
-  (i.e. the domain is currently pointed at Vercel DNS).
+The nameservers were pointed at `ns1.vercel-dns.com` /
+`ns2.vercel-dns.com`. On 2026-05-27 they were replaced with the four
+Cloud DNS values from the `name_servers` Terraform output, which is what
+let the managed SSL cert reach `ACTIVE`.
 
-After `terraform apply` creates the Cloud DNS managed zone, you MUST go
-into Vercel's domain settings for `albeorla.ai` and replace those
-nameservers with the four values from
-the `name_servers` Terraform output. Until you do, the managed SSL cert
-will sit in `PROVISIONING` forever and the site won't serve.
+Practical consequence today: DNS records for `albeorla.ai` are managed
+by Terraform in `dns.tf`, not in the Vercel dashboard. Adding a record
+there will do nothing. The one thing still owned by Vercel is the
+registration and the nameserver delegation itself, so do not let the
+domain's NS settings get reset there.
 
-If the apex is presently serving anything via Vercel that you want to
-keep alive, do the cutover during a quiet window — DNS propagation can
-take 24-48h worst case.
-
-## One-time bootstrap (before first `terraform init`)
+## One-time bootstrap (completed 2026-05-27, kept for rebuilds)
 
 These steps create the GCP project, attach billing, and create the
-state bucket. Run them manually — Terraform itself stores state in the
-bucket, so it can't create it.
+state bucket. Run them manually - Terraform itself stores state in the
+bucket, so it can't create it. They have already been run for
+`albeorla-ai-site`; you only need them to stand the stack up somewhere
+new.
 
 ```bash
 # 1. Create the project (skip if it already exists).
@@ -133,22 +120,27 @@ gcloud auth application-default login
 
 ## Apply
 
+`infra/terraform.tfvars` is gitignored, so a fresh checkout needs it
+recreated from the example (project id, billing account, region, domain,
+www domain, and `github_repo = "albeorla/albeorla-ai"`).
+
 ```bash
 cd infra
-cp terraform.tfvars.example terraform.tfvars   # edit if needed
+cp terraform.tfvars.example terraform.tfvars   # only on a fresh checkout
 terraform init
 terraform plan -out=tfplan
 terraform apply tfplan
 ```
 
-Expected first-apply duration: 15-25 minutes, dominated by the managed
-SSL certificate going through `PROVISIONING -> ACTIVE`. The cert won't
-go active until the Vercel (domain management UI) nameserver swap (above) has propagated.
+Routine applies are fast. The 15-25 minute first apply was dominated by
+the managed SSL certificate going through `PROVISIONING -> ACTIVE`, which
+completed once the nameserver cutover propagated. If the cert ever goes
+back to `PROVISIONING`, check the nameserver delegation first.
 
-## Post-apply checklist
+## Post-apply checklist (completed 2026-05-27, redo only after a destroy)
 
-1. Grab `terraform output name_servers`. Log into Vercel (domain management UI) and set
-   those four NS records on `albeorla.ai`. Save.
+1. Grab `terraform output name_servers`. Log into Vercel (domain
+   management UI) and set those four NS records on `albeorla.ai`. Save.
 2. Wait for `dig +short NS albeorla.ai` to return the Google NS values
    (usually 5-60 min, up to 48h).
 3. Watch the cert:
@@ -158,11 +150,11 @@ go active until the Vercel (domain management UI) nameserver swap (above) has pr
      --format="value(managed.status,managed.domainStatus)"
    ```
    When it flips to `ACTIVE`, the site serves.
-4. Configure the GitHub Actions deploy workflow (see
-   `.github/workflows/deploy.yml`) with:
-   - A Workload Identity Federation provider, OR a service account
-     key stored as `GCP_SA_KEY` (less ideal).
-   - The bucket name and URL map name from outputs.
+4. Set the deploy workflow secrets from the Terraform outputs (see the
+   Workload Identity Federation steps below). The deploy workflow reads
+   the bucket name and URL map name from its own `env:` block, so those
+   must match `terraform output site_bucket` and
+   `terraform output url_map_name`.
 
 ## GitHub Actions deploy
 
@@ -191,7 +183,11 @@ The OIDC provider also has an `attribute_condition` pinning
 `assertion.repository` and `assertion.ref` to the same values -- a
 second layer of restriction on top of the principalSet binding.
 
-### One-time setup after creating the GitHub repo
+### Wiring the deploy secrets (done; repeat only to rotate or re-bootstrap)
+
+The repo is `albeorla/albeorla-ai`, `github_repo` is already set in
+`terraform.tfvars`, and both secrets exist. These are the steps that
+produced them.
 
 ```bash
 cd infra
@@ -219,8 +215,6 @@ gh secret list
 ```
 
 ### Testing the deploy
-
-After the secrets are in place and the SSL cert is `ACTIVE`:
 
 ```bash
 # Trigger the workflow manually without pushing.
